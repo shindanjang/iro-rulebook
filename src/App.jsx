@@ -1,12 +1,12 @@
 import { useState } from "react";
 
 const disciplines = [
-  { id: "tracking",    code: "RH-F",  name: "추적 구조견",      emoji: "🐾", color: "#B8860B", bg: "#FFF8E1", de: "Fährtenrettungshund" },
   { id: "area",        code: "RH-FL", name: "야지 수색 구조견",  emoji: "🌲", color: "#2D6A3F", bg: "#E8F5E9", de: "Flächenrettungshund" },
   { id: "disaster",    code: "RH-T",  name: "재난 수색 구조견",  emoji: "🏚️", color: "#C0392B", bg: "#FEECEB", de: "Trümmerrettungshund" },
   { id: "mantrailing", code: "RH-MT", name: "맨트레일링 구조견", emoji: "👃", color: "#6A1B9A", bg: "#F3E5F5", de: "Mantrailing-Rettungshund" },
-  { id: "water",       code: "RH-W",  name: "수상 구조견",       emoji: "🌊", color: "#0277BD", bg: "#E1F5FE", de: "Wasserrettungshund" },
+  { id: "tracking",    code: "RH-F",  name: "추적 구조견",       emoji: "🐾", color: "#B8860B", bg: "#FFF8E1", de: "Fährtenrettungshund" },
   { id: "avalanche",   code: "RH-L",  name: "눈사태 구조견",     emoji: "🏔️", color: "#37474F", bg: "#ECEFF1", de: "Lawinenrettungshund" },
+  { id: "water",       code: "RH-W",  name: "수상 구조견",       emoji: "🌊", color: "#0277BD", bg: "#E1F5FE", de: "Wasserrettungshund" },
 ];
 
 const levels = [
@@ -280,6 +280,31 @@ const noseworkData = {
 
 // ── 시행방법 데이터
 const procedureMap = {
+  "시작보고 및 사회성 테스트": {
+    summary: "테스트 시작 전 지도수가 심사위원에게 보고하고, 견의 사회성·공격성을 검사합니다.",
+    steps: [
+      "지도수가 견과 함께 심사위원에게 집합·보고 — 건강증명서·접종기록 제출",
+      "심사위원이 지도수 및 견 장비 점검 (금지 보조수단 여부 확인)",
+      "낯선 사람(심사위원·도우미)이 견에게 접근 → 견의 반응 관찰",
+      "갑작스러운 큰 소리 또는 총성에 대한 견의 반응 확인",
+      "견이 위협·공격 자세를 보이지 않아야 통과",
+    ],
+    note: "공격성 또는 과도한 공포반응 시 즉시 실격. 사회성 테스트는 모든 단계·종목에서 동일 적용.",
+    schema: "socialTest",
+  },
+  "줄메고 따라걷기": {
+    summary: "V단계 전용. 견이 줄을 맨 상태로 지도수 왼쪽에 밀착하여 다양한 보행과 방향 전환을 소화합니다.",
+    steps: [
+      "기본자세에서 출발 — 견은 지도수 왼쪽에 견갑이 무릎에 밀착, 리드줄은 느슨하게 유지",
+      "직선 약 50보(상보) 이동 → 180° 회전",
+      "상보 10–15보 후 속보, 완보 각 10보 이상 실시",
+      "오른쪽 90° 굴절 20–25보 → 두 번째 오른쪽 90° 굴절 25–30보",
+      "180° 회전 후 10–15보 상보 → 기본자세",
+      "왼쪽 90° 굴절 후 출발점 방향 20–25보 → 기본자세",
+    ],
+    note: "리드줄이 팽팽해지거나 앞서 가기·측면 이탈·뒤처지기 시 감점. A·B단계는 줄 없이 실시.",
+    schema: "leashedHeeling",
+  },
   "줄없이 따라걷기": {
     summary: "견이 줄 없이 지도수 왼쪽에 밀착하여 다양한 보행 방식과 방향 전환을 소화합니다.",
     steps: [
@@ -451,7 +476,7 @@ const procedureMap = {
       "약 3초 후 종료기본자세",
     ],
     note: "앉아 신호 후 엎드려 또는 서 있으면 5점 감점.",
-    schema: null,
+    schema: "movingSit",
   },
   "자세변경 (테이블)": {
     summary: "테이블 위에서 앉아·엎드려·서 3가지 자세를 지도수 선택 순서로 실시합니다.",
@@ -852,10 +877,118 @@ function SchemaWait({ color }) {
   );
 }
 
+function SchemaSocialTest({ color }) {
+  return (
+    <svg viewBox="0 0 320 200" style={{ width: "100%", maxWidth: 320, display: "block", margin: "0 auto" }}>
+      <rect width="320" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
+      <text x="160" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">시작보고 및 사회성 테스트 진행 흐름</text>
+      {/* Step boxes */}
+      {[
+        { x: 20,  y: 35,  w: 80, label: "①집합·보고", sub: "지도수→심사위원" },
+        { x: 120, y: 35,  w: 80, label: "②서류확인", sub: "건강증명·접종" },
+        { x: 220, y: 35,  w: 80, label: "③몸수색", sub: "금지장비 여부" },
+        { x: 20,  y: 120, w: 80, label: "④낯선사람 접근", sub: "견 반응 관찰" },
+        { x: 120, y: 120, w: 80, label: "⑤갑작스런 소리", sub: "총성·큰소리" },
+        { x: 220, y: 120, w: 80, label: "⑥공격성 검사", sub: "위협 자세 없어야" },
+      ].map((b, i) => (
+        <g key={i}>
+          <rect x={b.x} y={b.y} width={b.w} height={46} rx="7" fill={color} opacity="0.15" stroke={color} strokeWidth="1.2" />
+          <text x={b.x + b.w/2} y={b.y + 20} textAnchor="middle" fontSize="10" fill={color} fontWeight="800">{b.label}</text>
+          <text x={b.x + b.w/2} y={b.y + 35} textAnchor="middle" fontSize="8.5" fill="#555">{b.sub}</text>
+        </g>
+      ))}
+      {/* Arrows row1 */}
+      <line x1="100" y1="58" x2="120" y2="58" stroke={color} strokeWidth="1.5" />
+      <polygon points="120,55 115,58 120,61" fill={color} />
+      <line x1="200" y1="58" x2="220" y2="58" stroke={color} strokeWidth="1.5" />
+      <polygon points="220,55 215,58 220,61" fill={color} />
+      {/* Down arrow */}
+      <line x1="160" y1="81" x2="160" y2="120" stroke={color} strokeWidth="1.5" strokeDasharray="4,2" />
+      <polygon points="157,120 160,127 163,120" fill={color} />
+      {/* Arrows row2 */}
+      <line x1="100" y1="143" x2="120" y2="143" stroke={color} strokeWidth="1.5" />
+      <polygon points="120,140 115,143 120,146" fill={color} />
+      <line x1="200" y1="143" x2="220" y2="143" stroke={color} strokeWidth="1.5" />
+      <polygon points="220,140 215,143 220,146" fill={color} />
+      <text x="160" y="190" textAnchor="middle" fontSize="8" fill="#888">공격성·과도한 두려움 반응 시 → 즉시 실격</text>
+    </svg>
+  );
+}
+
+function SchemaLeashedHeeling({ color }) {
+  return (
+    <svg viewBox="0 0 340 230" style={{ width: "100%", maxWidth: 340, display: "block", margin: "0 auto" }}>
+      <rect width="340" height="230" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
+      <text x="170" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">줄메고 따라걷기 — 경로 도식 (Leinenführigkeit)</text>
+      <g fill="none" stroke={color} strokeWidth="2">
+        <line x1="30" y1="185" x2="30" y2="80" />
+        <polygon points="30,72 25,84 35,84" fill={color} />
+        <path d="M30,80 Q30,58 52,58" />
+        <line x1="52" y1="58" x2="145" y2="58" />
+        <path d="M145,58 Q165,58 165,78" />
+        <line x1="165" y1="78" x2="165" y2="148" />
+        <path d="M165,148 Q165,168 185,168" />
+        <line x1="185" y1="168" x2="295" y2="168" />
+        <path d="M295,168 Q315,168 315,148" />
+        <line x1="315" y1="148" x2="315" y2="100" />
+        <path d="M315,100 Q315,80 295,80" />
+        <line x1="295" y1="80" x2="60" y2="80" />
+        <polygon points="62,76 72,80 62,84" fill={color} />
+      </g>
+      <circle cx="30" cy="185" r="6" fill={color} />
+      <text x="30" y="202" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START</text>
+      <text x="10" y="132" fontSize="8.5" fill={color} fontWeight="700">①50보</text>
+      <text x="55" y="52" fontSize="8" fill={color} fontWeight="700">②180°</text>
+      <text x="169" y="112" fontSize="8" fill={color} fontWeight="700">③R90°</text>
+      <text x="205" y="163" fontSize="8" fill={color} fontWeight="700">④R90°</text>
+      <text x="318" y="127" fontSize="8" fill={color} fontWeight="700">⑤180°</text>
+      <text x="195" y="76" fontSize="8" fill={color} fontWeight="700">⑥L90°</text>
+      <text x="85" y="52" fontSize="8" fill="#888">속보↔완보</text>
+      {/* Leash indicator */}
+      <rect x="230" y="190" width="100" height="30" rx="6" fill={color} opacity="0.12" stroke={color} strokeWidth="1" />
+      <text x="280" y="208" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">🦮 줄 착용 (V단계)</text>
+    </svg>
+  );
+}
+
+function SchemaMovingSit({ color }) {
+  return (
+    <svg viewBox="0 0 320 150" style={{ width: "100%", maxWidth: 320, display: "block", margin: "0 auto" }}>
+      <rect width="320" height="150" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
+      <text x="160" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">이동중 앉아 및 부르기 (Sitz aus der Bewegung)</text>
+      {/* Path line */}
+      <line x1="20" y1="80" x2="300" y2="80" stroke="#E2E8F0" strokeWidth="2" strokeDasharray="6,3" />
+      {/* Start */}
+      <circle cx="20" cy="80" r="7" fill={color} />
+      <text x="20" y="100" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">출발</text>
+      {/* Dog sits at 10-15보 */}
+      <circle cx="100" cy="80" r="9" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5" />
+      <text x="100" y="84" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">견↓</text>
+      <text x="100" y="67" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">앉아!</text>
+      <text x="100" y="108" textAnchor="middle" fontSize="7.5" fill="#555">10–15보</text>
+      {/* Handler keeps walking arrow */}
+      <line x1="110" y1="75" x2="205" y2="75" stroke={color} strokeWidth="2" />
+      <polygon points="205,72 198,75 205,78" fill={color} />
+      <text x="157" y="68" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">지도수 계속 이동</text>
+      {/* Handler stops at 30보 */}
+      <rect x="200" y="65" width="36" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2" />
+      <text x="218" y="82" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">정지</text>
+      <text x="218" y="108" textAnchor="middle" fontSize="7.5" fill="#555">+30보</text>
+      {/* Call back arrow */}
+      <path d="M190,85 Q145,115 110,88" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3" />
+      <polygon points="110,88 116,83 113,91" fill="#E53E3E" />
+      <text x="150" y="128" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">'와!' → 전면 앉아</text>
+    </svg>
+  );
+}
+
 function SchemaRenderer({ schemaKey, color }) {
   if (!schemaKey) return null;
   const map = {
     heeling: <SchemaHeeling color={color} />,
+    leashedHeeling: <SchemaLeashedHeeling color={color} />,
+    socialTest: <SchemaSocialTest color={color} />,
+    movingSit: <SchemaMovingSit color={color} />,
     remoteControl: <SchemaRemoteControl color={color} />,
     sendAwayV: <SchemaSendAwayV color={color} />,
     sendAwayAB: <SchemaSendAwayAB color={color} />,
@@ -899,7 +1032,7 @@ function ProcedureCard({ itemName, color }) {
 
 // ── MAIN APP
 export default function IRORulebookApp() {
-  const [activeDiscipline, setActiveDiscipline] = useState("tracking");
+  const [activeDiscipline, setActiveDiscipline] = useState("area");
   const [activeLevel, setActiveLevel] = useState("V");
   const [activeTab, setActiveTab] = useState("obedience");
   const [expandedItem, setExpandedItem] = useState(null);
@@ -1113,7 +1246,6 @@ export default function IRORulebookApp() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                   {items.map((item, i) => {
-                    const pct = (item.pts / obedTotal) * 100;
                     const hasProcedure = !!procedureMap[item.name];
                     const isOpen = expandedItem === i;
                     return (
@@ -1126,9 +1258,6 @@ export default function IRORulebookApp() {
                               <span>{item.icon}</span>
                               <span>{item.name}</span>
                               {hasProcedure && <span style={{ fontSize: 9, background: `${disc.color}20`, color: disc.color, borderRadius: 4, padding: "1px 6px", fontWeight: 700 }}>방법+도식</span>}
-                            </div>
-                            <div style={{ marginTop: 4, height: 4, background: "#F0F2F8", borderRadius: 2, overflow: "hidden" }}>
-                              <div style={{ height: "100%", width: `${pct}%`, background: disc.color, borderRadius: 2 }} />
                             </div>
                           </div>
                           <div style={{ fontSize: 15, fontWeight: 900, color: disc.color, flexShrink: 0, minWidth: 36, textAlign: "right" }}>
