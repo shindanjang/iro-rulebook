@@ -612,372 +612,683 @@ const procedureMap = {
   },
 };
 
-// ── SVG 도식 컴포넌트
-function SchemaHeeling({ color }) {
-  return (
-    <svg viewBox="0 0 340 230" style={{ width: "100%", maxWidth: 340, display: "block", margin: "0 auto" }}>
-      <rect width="340" height="230" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="170" y="18" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">줄없이 따라걷기 — 경로 도식 (Unterordnung ohne Leine)</text>
-      <g fill="none" stroke={color} strokeWidth="2">
-        <line x1="30" y1="185" x2="30" y2="80" />
-        <polygon points="30,72 25,84 35,84" fill={color} />
-        <path d="M30,80 Q30,58 52,58" />
-        <line x1="52" y1="58" x2="145" y2="58" />
-        <path d="M145,58 Q165,58 165,78" />
-        <line x1="165" y1="78" x2="165" y2="148" />
-        <path d="M165,148 Q165,168 185,168" />
-        <line x1="185" y1="168" x2="295" y2="168" />
-        <path d="M295,168 Q315,168 315,148" />
-        <line x1="315" y1="148" x2="315" y2="100" />
-        <path d="M315,100 Q315,80 295,80" />
-        <line x1="295" y1="80" x2="60" y2="80" />
-        <polygon points="62,76 72,80 62,84" fill={color} />
-      </g>
-      <circle cx="30" cy="185" r="6" fill={color} />
-      <text x="30" y="202" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START</text>
-      <text x="10" y="132" fontSize="8.5" fill={color} fontWeight="700">①50보</text>
-      <text x="55" y="52" fontSize="8" fill={color} fontWeight="700">②180°</text>
-      <text x="169" y="112" fontSize="8" fill={color} fontWeight="700">③R90°</text>
-      <text x="205" y="163" fontSize="8" fill={color} fontWeight="700">④R90°</text>
-      <text x="318" y="127" fontSize="8" fill={color} fontWeight="700">⑤180°</text>
-      <text x="195" y="76" fontSize="8" fill={color} fontWeight="700">⑥L90°</text>
-      <text x="85" y="52" fontSize="8" fill="#888">속보↔완보</text>
-    </svg>
-  );
-}
 
-function SchemaRemoteControl({ color }) {
-  return (
-    <svg viewBox="0 0 320 160" style={{ width: "100%", maxWidth: 320, display: "block", margin: "0 auto" }}>
-      <rect width="320" height="160" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="160" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격통제 (Fernsteuerung)</text>
-      <rect x="248" y="50" width="48" height="24" rx="6" fill={color} opacity="0.15" stroke={color} strokeWidth="1" />
-      <text x="272" y="66" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">지도수</text>
-      <circle cx="48" cy="95" r="11" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5" />
-      <text x="48" y="99" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">견</text>
-      <line x1="59" y1="92" x2="152" y2="74" stroke={color} strokeWidth="1.5" strokeDasharray="5,3" />
-      <circle cx="155" cy="73" r="7" fill="#E53E3E" />
-      <text x="155" y="77" textAnchor="middle" fontSize="8" fill="white" fontWeight="800">↓</text>
-      <text x="155" y="98" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">엎드려!</text>
-      <line x1="161" y1="71" x2="242" y2="60" stroke={color} strokeWidth="2" />
-      <polygon points="242,57 236,60 240,65" fill={color} />
-      <circle cx="244" cy="85" r="7" fill={color} opacity="0.6" />
-      <text x="244" y="110" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">전면앉아</text>
-      <text x="10" y="140" fontSize="8.5" fill="#555">①10–15보 앉아 → ②40보 이동 후 와! → ③중간 엎드려 → [B:서] → ④전면앉아</text>
-    </svg>
-  );
-}
+// ── SVG 도식 컴포넌트 (PDF 원본 충실 재현)
 
-function SchemaSendAwayV({ color }) {
-  return (
-    <svg viewBox="0 0 300 180" style={{ width: "100%", maxWidth: 300, display: "block", margin: "0 auto" }}>
-      <rect width="300" height="180" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="150" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격조정 V단계 (2개)</text>
-      <rect x="8" y="80" width="44" height="22" rx="6" fill={color} opacity="0.15" stroke={color} strokeWidth="1" />
-      <text x="30" y="94" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">지도수</text>
-      <circle cx="140" cy="90" r="9" fill="#FFB300" opacity="0.8" />
-      <text x="140" y="94" textAnchor="middle" fontSize="8" fill="#7A5000" fontWeight="700">중앙</text>
-      <rect x="172" y="50" width="40" height="22" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5" />
-      <text x="192" y="64" textAnchor="middle" fontSize="11" fill={color} fontWeight="800">T1</text>
-      <rect x="240" y="108" width="40" height="22" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5" />
-      <text x="260" y="122" textAnchor="middle" fontSize="11" fill={color} fontWeight="800">T2</text>
-      <line x1="52" y1="90" x2="131" y2="90" stroke={color} strokeWidth="2" strokeDasharray="4,2" />
-      <polygon points="131,87 124,90 131,93" fill={color} />
-      <line x1="148" y1="86" x2="178" y2="68" stroke={color} strokeWidth="2" />
-      <polygon points="178,68 172,72 176,78" fill={color} />
-      <line x1="210" y1="68" x2="244" y2="108" stroke={color} strokeWidth="2" />
-      <polygon points="244,108 238,103 248,104" fill={color} />
-      <line x1="248" y1="120" x2="62" y2="102" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3" />
-      <polygon points="62,99 68,102 62,105" fill="#E53E3E} " />
-      <text x="130" y="155" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">마지막 T에서 '와' → 전면앉아</text>
-    </svg>
-  );
-}
-
-function SchemaSendAwayAB({ color }) {
-  return (
-    <svg viewBox="0 0 300 195" style={{ width: "100%", maxWidth: 300, display: "block", margin: "0 auto" }}>
-      <rect width="300" height="195" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="150" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격조정 A·B단계 (3개)</text>
-      <rect x="8" y="90" width="44" height="22" rx="6" fill={color} opacity="0.15" stroke={color} strokeWidth="1" />
-      <text x="30" y="104" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">지도수</text>
-      <circle cx="140" cy="100" r="9" fill="#FFB300" opacity="0.8" />
-      <text x="140" y="104" textAnchor="middle" fontSize="8" fill="#7A5000" fontWeight="700">중앙</text>
-      {[[170,52],[230,52],[260,125]].map(([x,y],i)=>(
-        <g key={i}>
-          <rect x={x-20} y={y-12} width="40" height="24" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5" />
-          <text x={x} y={y+5} textAnchor="middle" fontSize="11" fill={color} fontWeight="800">T{i+1}</text>
-        </g>
-      ))}
-      <line x1="52" y1="100" x2="131" y2="100" stroke={color} strokeWidth="2" strokeDasharray="4,2" />
-      <polygon points="131,97 124,100 131,103" fill={color} />
-      <line x1="148" y1="96" x2="157" y2="56" stroke={color} strokeWidth="2" />
-      <polygon points="157,56 152,62 161,62" fill={color} />
-      <line x1="190" y1="52" x2="212" y2="52" stroke={color} strokeWidth="2" />
-      <polygon points="212,49 206,52 212,55" fill={color} />
-      <line x1="246" y1="62" x2="256" y2="114" stroke={color} strokeWidth="2" />
-      <polygon points="256,114 250,109 261,110" fill={color} />
-      <line x1="248" y1="130" x2="62" y2="112" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3" />
-      <polygon points="62,109 69,112 62,115" fill="#E53E3E" />
-      <text x="148" y="165" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">마지막 T에서 '와' → 전면앉아</text>
-      <text x="148" y="178" textAnchor="middle" fontSize="7.5" fill="#888">추첨 순서로 T1→T2→T3 이동, 각 3초 대기</text>
-    </svg>
-  );
-}
-
-function SchemaLadder({ color }) {
-  return (
-    <svg viewBox="0 0 280 150" style={{ width: "100%", maxWidth: 280, display: "block", margin: "0 auto" }}>
-      <rect width="280" height="150" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="140" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">사다리 구성도 (Leiter)</text>
-      <rect x="60" y="30" width="8" height="90" rx="2" fill={color} opacity="0.6" />
-      <rect x="212" y="30" width="8" height="90" rx="2" fill={color} opacity="0.6" />
-      {Array.from({length:14}).map((_,i)=>(
-        <rect key={i} x="60" y={30+i*6.4} width="160" height="3" rx="1" fill={color} opacity="0.3" />
-      ))}
-      <rect x="10" y="108" width="58" height="12" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1" />
-      <rect x="212" y="108" width="58" height="12" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1" />
-      <text x="39" y="118" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="600">디딤판(120cm)</text>
-      <text x="241" y="118" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="600">디딤판(120cm)</text>
-      <text x="140" y="26" textAnchor="middle" fontSize="8" fill="#555" fontWeight="700">← 4m · 14 디딤대 · 간격 30cm →</text>
-      <text x="140" y="138" textAnchor="middle" fontSize="8" fill="#888">높이 50cm · 너비 30cm · 디딤대 두께 5cm</text>
-    </svg>
-  );
-}
-
-function SchemaSeesaw({ color }) {
-  return (
-    <svg viewBox="0 0 280 150" style={{ width: "100%", maxWidth: 280, display: "block", margin: "0 auto" }}>
-      <rect width="280" height="150" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="140" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">그네 구성도 (Hängebrücke)</text>
-      <rect x="20" y="90" width="50" height="14" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1" />
-      <text x="45" y="101" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">디딤판</text>
-      <rect x="210" y="90" width="50" height="14" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1" />
-      <text x="235" y="101" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">디딤판</text>
-      <line x1="60" y1="75" x2="60" y2="40" stroke={color} strokeWidth="2" strokeDasharray="4,2" />
-      <line x1="220" y1="75" x2="220" y2="40" stroke={color} strokeWidth="2" strokeDasharray="4,2" />
-      <line x1="60" y1="40" x2="60" y2="34" stroke={color} strokeWidth="3" />
-      <line x1="220" y1="40" x2="220" y2="34" stroke={color} strokeWidth="3" />
-      <rect x="60" y="65" width="160" height="14" rx="4" fill={color} opacity="0.3" stroke={color} strokeWidth="1.5" />
-      <text x="140" y="76" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">← 3m 널빤지 (자유 좌우이동) →</text>
-      <rect x="35" y="30" width="50" height="10" rx="3" fill={color} opacity="0.5" />
-      <rect x="195" y="30" width="50" height="10" rx="3" fill={color} opacity="0.5" />
-      <text x="60" y="39" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">지지대</text>
-      <text x="220" y="39" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">지지대</text>
-      <text x="140" y="125" textAnchor="middle" fontSize="8" fill="#888">높이 40cm · 이동폭 최대 25cm · B단계 전용</text>
-    </svg>
-  );
-}
-
-function SchemaTunnel({ color }) {
-  return (
-    <svg viewBox="0 0 260 120" style={{ width: "100%", maxWidth: 260, display: "block", margin: "0 auto" }}>
-      <rect width="260" height="120" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="130" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">터널통과 구성도 (Tunnel)</text>
-      <ellipse cx="55" cy="70" rx="22" ry="28" fill="none" stroke={color} strokeWidth="2.5" />
-      <ellipse cx="205" cy="70" rx="22" ry="28" fill="none" stroke={color} strokeWidth="2.5" />
-      <line x1="55" y1="42" x2="205" y2="42" stroke={color} strokeWidth="2.5" />
-      <line x1="55" y1="98" x2="205" y2="98" stroke={color} strokeWidth="2.5" />
-      <rect x="55" y="42" width="150" height="56" fill={color} opacity="0.08" />
-      <text x="130" y="74" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">직경 50cm</text>
-      <line x1="20" y1="105" x2="240" y2="105" stroke={color} strokeWidth="1" strokeDasharray="3,3" />
-      <text x="130" y="114" textAnchor="middle" fontSize="8" fill="#888">길이 3m (하드터널) / 소프트터널 동일 길이</text>
-    </svg>
-  );
-}
-
-function SchemaFixedBridge({ color }) {
-  return (
-    <svg viewBox="0 0 280 120" style={{ width: "100%", maxWidth: 280, display: "block", margin: "0 auto" }}>
-      <rect width="280" height="120" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="140" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">고정 나무다리 (Starre Brücke)</text>
-      <rect x="30" y="55" width="12" height="35" rx="3" fill={color} opacity="0.6" />
-      <rect x="238" y="55" width="12" height="35" rx="3" fill={color} opacity="0.6" />
-      <rect x="30" y="48" width="220" height="14" rx="4" fill={color} opacity="0.35" stroke={color} strokeWidth="1.5" />
-      <text x="140" y="59" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">← 약 4m (너비 30cm) →</text>
-      <text x="140" y="100" textAnchor="middle" fontSize="8" fill="#888">지지대 높이 50cm 내외 · V단계 전용</text>
-      <text x="30" y="46" fontSize="8" fill={color} fontWeight="700">지지대</text>
-      <text x="213" y="46" fontSize="8" fill={color} fontWeight="700">지지대</text>
-    </svg>
-  );
-}
-
-function SchemaMovingBridge({ color }) {
-  return (
-    <svg viewBox="0 0 280 130" style={{ width: "100%", maxWidth: 280, display: "block", margin: "0 auto" }}>
-      <rect width="280" height="130" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="140" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">비고정 나무다리 (Wackelbrücke)</text>
-      <ellipse cx="75" cy="80" rx="22" ry="14" fill="none" stroke={color} strokeWidth="2" />
-      <ellipse cx="205" cy="80" rx="22" ry="14" fill="none" stroke={color} strokeWidth="2" />
-      <text x="75" y="84" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">원통</text>
-      <text x="205" y="84" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">원통</text>
-      <text x="75" y="97" textAnchor="middle" fontSize="7.5" fill="#888">Ø40cm</text>
-      <text x="205" y="97" textAnchor="middle" fontSize="7.5" fill="#888">Ø40cm</text>
-      <rect x="53" y="58" width="174" height="16" rx="4" fill={color} opacity="0.3" stroke={color} strokeWidth="1.5" />
-      <text x="140" y="70" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">← 4m 판자 (이동폭 약 20cm) →</text>
-      <text x="140" y="118" textAnchor="middle" fontSize="8" fill="#888">A단계 전용 · 너비 30cm</text>
-    </svg>
-  );
-}
-
-function SchemaWaterRemote({ color }) {
-  return (
-    <svg viewBox="0 0 310 170" style={{ width: "100%", maxWidth: 310, display: "block", margin: "0 auto" }}>
-      <rect width="310" height="170" rx="10" fill="#E1F5FE" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="155" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">수상 원격조정 (Wasser-Fernsteuerung)</text>
-      <rect x="8" y="125" width="60" height="20" rx="4" fill="#1A1E2E" opacity="0.7" />
-      <text x="38" y="138" textAnchor="middle" fontSize="8" fill="white" fontWeight="700">지도수(육지)</text>
-      <rect x="165" y="30" width="50" height="20" rx="4" fill={color} opacity="0.8" />
-      <text x="190" y="43" textAnchor="middle" fontSize="8" fill="white" fontWeight="700">보트1</text>
-      <rect x="240" y="100" width="50" height="20" rx="4" fill={color} opacity="0.8" />
-      <text x="265" y="113" textAnchor="middle" fontSize="8" fill="white" fontWeight="700">보트2</text>
-      <circle cx="100" cy="95" r="9" fill="#FFB300" opacity="0.9" />
-      <text x="100" y="99" textAnchor="middle" fontSize="8" fill="#7A5000" fontWeight="700">견</text>
-      <line x1="68" y1="130" x2="95" y2="100" stroke="#1A1E2E" strokeWidth="1.5" strokeDasharray="4,2" />
-      <line x1="109" y1="90" x2="170" y2="47" stroke={color} strokeWidth="2" />
-      <polygon points="170,47 164,52 172,57" fill={color} />
-      <line x1="213" y1="47" x2="243" y2="100" stroke={color} strokeWidth="2" />
-      <polygon points="243,100 237,95 248,96" fill={color} />
-      <line x1="248" y1="112" x2="72" y2="130" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3" />
-      <polygon points="72,127 79,130 72,133" fill="#E53E3E" />
-      <text x="155" y="155" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">마지막 지점 후 '와' → 전면앉아</text>
-      <text x="155" y="166" textAnchor="middle" fontSize="7.5" fill="#888">A=20m·B=40m 거리</text>
-    </svg>
-  );
-}
-
-function SchemaWait({ color }) {
-  return (
-    <svg viewBox="0 0 300 150" style={{ width: "100%", maxWidth: 300, display: "block", margin: "0 auto" }}>
-      <rect width="300" height="150" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="150" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">대기 위치 비교 (단계별)</text>
-      <text x="35" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">V단계</text>
-      <circle cx="20" cy="85" r="8" fill={color} opacity="0.3" />
-      <text x="20" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
-      <circle cx="62" cy="85" r="8" fill={color} opacity="0.7" />
-      <text x="62" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">지도</text>
-      <line x1="28" y1="85" x2="54" y2="85" stroke={color} strokeWidth="1.5" />
-      <text x="41" y="100" textAnchor="middle" fontSize="7.5" fill="#555">20보 (정면)</text>
-      <text x="115" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">A단계</text>
-      <circle cx="95" cy="85" r="8" fill={color} opacity="0.3" />
-      <text x="95" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
-      <circle cx="150" cy="85" r="8" fill={color} opacity="0.7" />
-      <text x="150" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">지도</text>
-      <line x1="103" y1="85" x2="142" y2="85" stroke={color} strokeWidth="1.5" />
-      <text x="125" y="100" textAnchor="middle" fontSize="7.5" fill="#555">40보 (등 돌림)</text>
-      <text x="230" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">B단계</text>
-      <circle cx="200" cy="85" r="8" fill={color} opacity="0.3" />
-      <text x="200" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
-      <rect x="255" y="72" width="28" height="28" rx="4" fill="#555" opacity="0.5" />
-      <text x="269" y="88" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">은폐</text>
-      <line x1="208" y1="85" x2="255" y2="85" stroke={color} strokeWidth="1.5" strokeDasharray="4,2" />
-      <text x="232" y="100" textAnchor="middle" fontSize="7.5" fill="#555">완전 은폐</text>
-      <text x="150" y="130" textAnchor="middle" fontSize="8" fill="#888">대기 중 3m 이상 이탈 시: 과목 후 = 부족함, 이전 = 0점</text>
-    </svg>
-  );
-}
-
+// 사회성 테스트 — PDF p.14 그룹 동선 도식
 function SchemaSocialTest({ color }) {
   return (
-    <svg viewBox="0 0 320 200" style={{ width: "100%", maxWidth: 320, display: "block", margin: "0 auto" }}>
-      <rect width="320" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="160" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">시작보고 및 사회성 테스트 진행 흐름</text>
-      {/* Step boxes */}
-      {[
-        { x: 20,  y: 35,  w: 80, label: "①집합·보고", sub: "지도수→심사위원" },
-        { x: 120, y: 35,  w: 80, label: "②서류확인", sub: "건강증명·접종" },
-        { x: 220, y: 35,  w: 80, label: "③몸수색", sub: "금지장비 여부" },
-        { x: 20,  y: 120, w: 80, label: "④낯선사람 접근", sub: "견 반응 관찰" },
-        { x: 120, y: 120, w: 80, label: "⑤갑작스런 소리", sub: "총성·큰소리" },
-        { x: 220, y: 120, w: 80, label: "⑥공격성 검사", sub: "위협 자세 없어야" },
-      ].map((b, i) => (
-        <g key={i}>
-          <rect x={b.x} y={b.y} width={b.w} height={46} rx="7" fill={color} opacity="0.15" stroke={color} strokeWidth="1.2" />
-          <text x={b.x + b.w/2} y={b.y + 20} textAnchor="middle" fontSize="10" fill={color} fontWeight="800">{b.label}</text>
-          <text x={b.x + b.w/2} y={b.y + 35} textAnchor="middle" fontSize="8.5" fill="#555">{b.sub}</text>
-        </g>
-      ))}
-      {/* Arrows row1 */}
-      <line x1="100" y1="58" x2="120" y2="58" stroke={color} strokeWidth="1.5" />
-      <polygon points="120,55 115,58 120,61" fill={color} />
-      <line x1="200" y1="58" x2="220" y2="58" stroke={color} strokeWidth="1.5" />
-      <polygon points="220,55 215,58 220,61" fill={color} />
-      {/* Down arrow */}
-      <line x1="160" y1="81" x2="160" y2="120" stroke={color} strokeWidth="1.5" strokeDasharray="4,2" />
-      <polygon points="157,120 160,127 163,120" fill={color} />
-      {/* Arrows row2 */}
-      <line x1="100" y1="143" x2="120" y2="143" stroke={color} strokeWidth="1.5" />
-      <polygon points="120,140 115,143 120,146" fill={color} />
-      <line x1="200" y1="143" x2="220" y2="143" stroke={color} strokeWidth="1.5" />
-      <polygon points="220,140 215,143 220,146" fill={color} />
-      <text x="160" y="190" textAnchor="middle" fontSize="8" fill="#888">공격성·과도한 두려움 반응 시 → 즉시 실격</text>
+    <svg viewBox="0 0 360 260" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="260" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">시작보고 및 사회성 테스트 — 그룹 동선 도식 (PDF 3.3.4)</text>
+      {/* Outer circle (DH path) */}
+      <circle cx="180" cy="140" r="80" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="5,3" opacity="0.4"/>
+      {/* Inner circle (group) */}
+      <circle cx="180" cy="140" r="55" fill="none" stroke={color} strokeWidth="1.5" opacity="0.5"/>
+      <text x="180" y="100" textAnchor="middle" fontSize="8" fill={color} opacity="0.6">내부원 r=2m</text>
+      <text x="180" y="228" textAnchor="middle" fontSize="8" fill={color} opacity="0.5">외부원 r=3m</text>
+      {/* Group people on inner circle */}
+      {[0,120,240].map((deg,i)=>{
+        const r=55, rad=(deg-90)*Math.PI/180;
+        const x=180+r*Math.cos(rad), y=140+r*Math.sin(rad);
+        return <g key={i}>
+          <circle cx={x} cy={y} r="8" fill={color} opacity="0.25" stroke={color} strokeWidth="1.2"/>
+          <text x={x} y={y+3.5} textAnchor="middle" fontSize="7" fill={color} fontWeight="700">HP</text>
+        </g>;
+      })}
+      {/* Test dog on inner circle */}
+      <circle cx="180" cy="85" r="9" fill={color} opacity="0.6"/>
+      <text x="180" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">견</text>
+      {/* DH on outer circle */}
+      <circle cx="180" cy="60" r="9" fill="#1A1E2E" opacity="0.8"/>
+      <text x="180" y="64" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">DH</text>
+      {/* Counterclockwise arrow */}
+      <path d="M 245,120 A 70,70 0 0,0 180,70" fill="none" stroke={color} strokeWidth="2" markerEnd="url(#arr)"/>
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill={color}/>
+        </marker>
+      </defs>
+      {/* Figure-8 arrow indication */}
+      <text x="180" y="175" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">8자 동선으로 통과</text>
+      {/* Legend */}
+      <rect x="10" y="230" width="340" height="22" rx="4" fill={color} opacity="0.08"/>
+      <text x="180" y="245" textAnchor="middle" fontSize="8" fill="#555">그룹(반시계 방향 이동) → RDT가 카운터 방향 이동 → 그룹 통과 → 8자 동선</text>
     </svg>
   );
 }
 
+// 줄메고 따라걷기 — PDF p.16 공식 도식 (On-leash heeling)
 function SchemaLeashedHeeling({ color }) {
   return (
-    <svg viewBox="0 0 340 230" style={{ width: "100%", maxWidth: 340, display: "block", margin: "0 auto" }}>
-      <rect width="340" height="230" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="170" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">줄메고 따라걷기 — 경로 도식 (Leinenführigkeit)</text>
-      <g fill="none" stroke={color} strokeWidth="2">
-        <line x1="30" y1="185" x2="30" y2="80" />
-        <polygon points="30,72 25,84 35,84" fill={color} />
-        <path d="M30,80 Q30,58 52,58" />
-        <line x1="52" y1="58" x2="145" y2="58" />
-        <path d="M145,58 Q165,58 165,78" />
-        <line x1="165" y1="78" x2="165" y2="148" />
-        <path d="M165,148 Q165,168 185,168" />
-        <line x1="185" y1="168" x2="295" y2="168" />
-        <path d="M295,168 Q315,168 315,148" />
-        <line x1="315" y1="148" x2="315" y2="100" />
-        <path d="M315,100 Q315,80 295,80" />
-        <line x1="295" y1="80" x2="60" y2="80" />
-        <polygon points="62,76 72,80 62,84" fill={color} />
-      </g>
-      <circle cx="30" cy="185" r="6" fill={color} />
-      <text x="30" y="202" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START</text>
-      <text x="10" y="132" fontSize="8.5" fill={color} fontWeight="700">①50보</text>
-      <text x="55" y="52" fontSize="8" fill={color} fontWeight="700">②180°</text>
-      <text x="169" y="112" fontSize="8" fill={color} fontWeight="700">③R90°</text>
-      <text x="205" y="163" fontSize="8" fill={color} fontWeight="700">④R90°</text>
-      <text x="318" y="127" fontSize="8" fill={color} fontWeight="700">⑤180°</text>
-      <text x="195" y="76" fontSize="8" fill={color} fontWeight="700">⑥L90°</text>
-      <text x="85" y="52" fontSize="8" fill="#888">속보↔완보</text>
-      {/* Leash indicator */}
-      <rect x="230" y="190" width="100" height="30" rx="6" fill={color} opacity="0.12" stroke={color} strokeWidth="1" />
-      <text x="280" y="208" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">🦮 줄 착용 (V단계)</text>
+    <svg viewBox="0 0 400 300" style={{ width:"100%", maxWidth:400, display:"block", margin:"0 auto" }}>
+      <rect width="400" height="300" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="200" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">줄메고 따라걷기 경로 도식 (PDF 3.3.5 On-leash Heeling)</text>
+      {/* Main path faithful to PDF */}
+      {/* Start bottom right, go up ~50 paces */}
+      <line x1="300" y1="260" x2="300" y2="100" stroke={color} strokeWidth="2"/>
+      <polygon points="300,93 296,105 304,105" fill={color}/>
+      {/* KW (U-turn) */}
+      <path d="M300,100 Q300,78 278,78" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="318" y="96" fontSize="8" fill={color} fontWeight="700">KW</text>
+      {/* fast pace section */}
+      <line x1="278" y1="78" x2="195" y2="78" stroke={color} strokeWidth="2" strokeDasharray="5,2"/>
+      <text x="235" y="72" textAnchor="middle" fontSize="7.5" fill={color}>속보 10-15보</text>
+      {/* slow pace */}
+      <line x1="195" y1="78" x2="120" y2="78" stroke={color} strokeWidth="2" strokeDasharray="2,2"/>
+      <text x="157" y="72" textAnchor="middle" fontSize="7.5" fill={color}>완보 10-15보</text>
+      {/* normal pace back */}
+      <line x1="120" y1="78" x2="70" y2="78" stroke={color} strokeWidth="2"/>
+      {/* RW (right turn 1) */}
+      <path d="M70,78 Q50,78 50,98" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="20" y="96" fontSize="8" fill={color} fontWeight="700">RW</text>
+      {/* 20-25 paces down */}
+      <line x1="50" y1="98" x2="50" y2="168" stroke={color} strokeWidth="2"/>
+      <text x="15" y="132" fontSize="7.5" fill={color}>20-25보</text>
+      {/* RW (right turn 2) */}
+      <path d="M50,168 Q50,188 70,188" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="20" y="186" fontSize="8" fill={color} fontWeight="700">RW</text>
+      {/* 25-30 paces right */}
+      <line x1="70" y1="188" x2="200" y2="188" stroke={color} strokeWidth="2"/>
+      <text x="135" y="200" textAnchor="middle" fontSize="7.5" fill={color}>25-30보</text>
+      {/* KW (U-turn bottom) */}
+      <path d="M200,188 Q220,188 220,168" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="225" y="186" fontSize="8" fill={color} fontWeight="700">KW</text>
+      <line x1="220" y1="168" x2="220" y2="138" stroke={color} strokeWidth="2"/>
+      {/* 10-15 paces + GS */}
+      <text x="230" y="155" fontSize="7.5" fill={color}>10-15보</text>
+      <rect x="208" y="128" width="24" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
+      <text x="220" y="137" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">GS</text>
+      {/* LW left turn */}
+      <path d="M220,128 Q220,108 200,108" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="225" y="115" fontSize="8" fill={color} fontWeight="700">LW</text>
+      <line x1="200" y1="108" x2="70" y2="108" stroke={color} strokeWidth="2"/>
+      <text x="135" y="120" textAnchor="middle" fontSize="7.5" fill={color}>20-25보</text>
+      {/* Start/End marker */}
+      <circle cx="300" cy="260" r="7" fill={color}/>
+      <text x="300" y="278" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START / END</text>
+      {/* Down area markers for male/female dog */}
+      <ellipse cx="90" cy="260" rx="12" ry="8" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
+      <text x="90" y="263" textAnchor="middle" fontSize="7" fill={color}>♂견</text>
+      <ellipse cx="120" cy="254" rx="12" ry="8" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
+      <text x="120" y="257" textAnchor="middle" fontSize="7" fill={color}>♀견</text>
+      <text x="105" y="282" textAnchor="middle" fontSize="7" fill="#888">대기 위치 (약 6m 간격)</text>
+      {/* Leash badge */}
+      <rect x="290" y="230" width="100" height="16" rx="5" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
+      <text x="340" y="241" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">🦮 줄 착용 (V단계)</text>
     </svg>
   );
 }
 
+// 줄없이 따라걷기 — PDF p.16 공식 도식 (Off-leash heeling)
+function SchemaHeeling({ color }) {
+  return (
+    <svg viewBox="0 0 400 300" style={{ width:"100%", maxWidth:400, display:"block", margin:"0 auto" }}>
+      <rect width="400" height="300" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="200" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">줄없이 따라걷기 경로 도식 (PDF 3.3.5 Off-leash Heeling)</text>
+      <line x1="300" y1="260" x2="300" y2="100" stroke={color} strokeWidth="2"/>
+      <polygon points="300,93 296,105 304,105" fill={color}/>
+      <path d="M300,100 Q300,78 278,78" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="318" y="96" fontSize="8" fill={color} fontWeight="700">KW</text>
+      <line x1="278" y1="78" x2="195" y2="78" stroke={color} strokeWidth="2" strokeDasharray="5,2"/>
+      <text x="235" y="72" textAnchor="middle" fontSize="7.5" fill={color}>속보 10-15보</text>
+      <line x1="195" y1="78" x2="120" y2="78" stroke={color} strokeWidth="2" strokeDasharray="2,2"/>
+      <text x="157" y="72" textAnchor="middle" fontSize="7.5" fill={color}>완보 10-15보</text>
+      <line x1="120" y1="78" x2="70" y2="78" stroke={color} strokeWidth="2"/>
+      <path d="M70,78 Q50,78 50,98" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="20" y="96" fontSize="8" fill={color} fontWeight="700">RW</text>
+      <line x1="50" y1="98" x2="50" y2="168" stroke={color} strokeWidth="2"/>
+      <text x="15" y="132" fontSize="7.5" fill={color}>20-25보</text>
+      <path d="M50,168 Q50,188 70,188" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="20" y="186" fontSize="8" fill={color} fontWeight="700">RW</text>
+      <line x1="70" y1="188" x2="200" y2="188" stroke={color} strokeWidth="2"/>
+      <text x="135" y="200" textAnchor="middle" fontSize="7.5" fill={color}>25-30보</text>
+      <path d="M200,188 Q220,188 220,168" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="225" y="186" fontSize="8" fill={color} fontWeight="700">KW</text>
+      <line x1="220" y1="168" x2="220" y2="138" stroke={color} strokeWidth="2"/>
+      <text x="230" y="155" fontSize="7.5" fill={color}>10-15보</text>
+      <rect x="208" y="128" width="24" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
+      <text x="220" y="137" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">GS</text>
+      <path d="M220,128 Q220,108 200,108" fill="none" stroke={color} strokeWidth="2"/>
+      <text x="225" y="115" fontSize="8" fill={color} fontWeight="700">LW</text>
+      <line x1="200" y1="108" x2="70" y2="108" stroke={color} strokeWidth="2"/>
+      <text x="135" y="120" textAnchor="middle" fontSize="7.5" fill={color}>20-25보</text>
+      <circle cx="300" cy="260" r="7" fill={color}/>
+      <text x="300" y="278" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START / END</text>
+      <ellipse cx="90" cy="260" rx="12" ry="8" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
+      <text x="90" y="263" textAnchor="middle" fontSize="7" fill={color}>♂견</text>
+      <ellipse cx="120" cy="254" rx="12" ry="8" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
+      <text x="120" y="257" textAnchor="middle" fontSize="7" fill={color}>♀견</text>
+      <rect x="290" y="230" width="100" height="16" rx="5" fill={color} opacity="0.12" stroke={color} strokeWidth="1"/>
+      <text x="340" y="241" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">줄 없음 (A·B단계)</text>
+    </svg>
+  );
+}
+
+// 이동중 앉아 및 부르기 — PDF p.17 Phase 1/2/3 도식
 function SchemaMovingSit({ color }) {
   return (
-    <svg viewBox="0 0 320 150" style={{ width: "100%", maxWidth: 320, display: "block", margin: "0 auto" }}>
-      <rect width="320" height="150" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1" />
-      <text x="160" y="17" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">이동중 앉아 및 부르기 (Sitz aus der Bewegung)</text>
-      {/* Path line */}
-      <line x1="20" y1="80" x2="300" y2="80" stroke="#E2E8F0" strokeWidth="2" strokeDasharray="6,3" />
-      {/* Start */}
-      <circle cx="20" cy="80" r="7" fill={color} />
-      <text x="20" y="100" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">출발</text>
-      {/* Dog sits at 10-15보 */}
-      <circle cx="100" cy="80" r="9" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5" />
-      <text x="100" y="84" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">견↓</text>
-      <text x="100" y="67" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">앉아!</text>
-      <text x="100" y="108" textAnchor="middle" fontSize="7.5" fill="#555">10–15보</text>
-      {/* Handler keeps walking arrow */}
-      <line x1="110" y1="75" x2="205" y2="75" stroke={color} strokeWidth="2" />
-      <polygon points="205,72 198,75 205,78" fill={color} />
-      <text x="157" y="68" textAnchor="middle" fontSize="8" fill={color} fontWeight="600">지도수 계속 이동</text>
-      {/* Handler stops at 30보 */}
-      <rect x="200" y="65" width="36" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2" />
-      <text x="218" y="82" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">정지</text>
-      <text x="218" y="108" textAnchor="middle" fontSize="7.5" fill="#555">+30보</text>
-      {/* Call back arrow */}
-      <path d="M190,85 Q145,115 110,88" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3" />
-      <polygon points="110,88 116,83 113,91" fill="#E53E3E" />
-      <text x="150" y="128" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">'와!' → 전면 앉아</text>
+    <svg viewBox="0 0 340 200" style={{ width:"100%", maxWidth:340, display:"block", margin:"0 auto" }}>
+      <rect width="340" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="170" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">이동중 앉아 및 부르기 (PDF 3.3.6)</text>
+      {/* Phase labels */}
+      <text x="50" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 1</text>
+      <text x="185" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 2</text>
+      <text x="295" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 3</text>
+      {/* Phase 1: DH walking, dog sits */}
+      {/* DH at top walking up */}
+      <rect x="42" y="45" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="50" cy="40" r="6" fill={color} opacity="0.7"/>
+      <polygon points="50,67 46,80 54,80" fill={color} opacity="0.5"/>
+      {/* Dog sitting below */}
+      <ellipse cx="50" cy="120" rx="9" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="50" y="123" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
+      {/* red arrow up (DH keeps walking) */}
+      <line x1="50" y1="95" x2="50" y2="68" stroke="#E53E3E" strokeWidth="2"/>
+      <polygon points="50,61 46,72 54,72" fill="#E53E3E"/>
+      {/* Distance label */}
+      <line x1="58" y1="68" x2="58" y2="120" stroke={color} strokeWidth="1" strokeDasharray="3,2"/>
+      <text x="70" y="97" fontSize="7.5" fill={color}>10-15보</text>
+      {/* Start position */}
+      <rect x="40" y="148" width="20" height="14" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1"/>
+      <text x="50" y="158" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">시작</text>
+      <line x1="50" y1="127" x2="50" y2="148" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="68" y="138" fontSize="7.5" fill={color}>30보</text>
+
+      {/* Phase 2: DH stopped, turned, dog still sitting */}
+      <rect x="177" y="80" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="185" cy="76" r="6" fill={color} opacity="0.7"/>
+      {/* DH facing dog (turned) */}
+      <polygon points="185,102 181,114 189,114" fill={color} opacity="0.4"/>
+      <ellipse cx="185" cy="130" rx="9" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="185" y="133" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
+      {/* recall arrow */}
+      <path d="M185,121 Q185,110 185,103" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="4,2"/>
+      <text x="200" y="115" fontSize="7.5" fill="#E53E3E">와!</text>
+
+      {/* Phase 3: dog in front sit */}
+      <rect x="286" y="80" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="294" cy="76" r="6" fill={color} opacity="0.7"/>
+      <ellipse cx="294" cy="108" rx="9" ry="7" fill={color} opacity="0.6" stroke={color} strokeWidth="1.2"/>
+      <text x="294" y="111" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">전면</text>
+      <text x="294" y="120" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
+
+      {/* Bottom note */}
+      <rect x="10" y="170" width="320" height="22" rx="4" fill={color} opacity="0.08"/>
+      <text x="170" y="180" textAnchor="middle" fontSize="7.5" fill="#555">DH는 멈추지 않고 계속 이동 → 30보 후 정지·반전 → 심사위원 지시로 '와!'</text>
+      <text x="170" y="189" textAnchor="middle" fontSize="7.5" fill="#C0392B">앉아 후 엎드려/서 자세 → 5점 감점</text>
+    </svg>
+  );
+}
+
+// 원격통제 — PDF p.18 Phase 1/2/3/4 도식
+function SchemaRemoteControl({ color }) {
+  return (
+    <svg viewBox="0 0 360 220" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격통제 (PDF 3.3.7 Distance Control)</text>
+      {/* Phase labels */}
+      {["Phase 1","Phase 2","Phase 3","Phase 4"].map((p,i)=>(
+        <text key={i} x={45+i*85} y="35" textAnchor="middle" fontSize="8.5" fill={color} fontWeight="800">{p}</text>
+      ))}
+      {/* Phase 1: DH walking up, dog at dot (sits) */}
+      <circle cx="45" cy="55" r="5" fill={color}/>
+      {/* Red line (sit position) */}
+      <line x1="45" y1="60" x2="45" y2="140" stroke="#E53E3E" strokeWidth="2.5"/>
+      <polygon points="45,53 41,63 49,63" fill="#E53E3E"/>
+      {/* Dog at bottom of red line */}
+      <ellipse cx="45" cy="148" rx="8" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="45" y="151" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">앉아</text>
+      {/* 10-15 steps label */}
+      <text x="22" y="195" textAnchor="middle" fontSize="7" fill={color}>10-15보</text>
+      <line x1="35" y1="148" x2="35" y2="185" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <rect x="30" y="185" width="30" height="14" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
+      <text x="45" y="195" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">시작</text>
+      {/* 40보 label */}
+      <line x1="55" y1="60" x2="55" y2="148" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <text x="68" y="107" fontSize="7" fill={color}>40보</text>
+
+      {/* Phase 2: DH stopped, turned, dog approaching */}
+      <rect x="120" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="126" cy="51" r="5" fill={color} opacity="0.7"/>
+      {/* dotted line (dog running) */}
+      <line x1="126" y1="73" x2="126" y2="148" stroke={color} strokeWidth="1.5" strokeDasharray="5,3"/>
+      <polygon points="126,148 122,138 130,138" fill={color}/>
+      {/* 3 dots (start positions) */}
+      {[45,126,185].map((x,i)=><circle key={i} cx={x} cy={170} r="4" fill={color}/>)}
+
+      {/* Phase 3: B label (midpoint down) */}
+      <rect x="162" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="168" cy="51" r="5" fill={color} opacity="0.7"/>
+      <text x="200" y="112" fontSize="9" fill={color} fontWeight="900">B</text>
+      {/* dog in down */}
+      <ellipse cx="168" cy="118" rx="11" ry="7" fill={color} opacity="0.25" stroke={color} strokeWidth="1.2"/>
+      <text x="168" y="121" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">엎드려</text>
+      <line x1="168" y1="73" x2="168" y2="111" stroke={color} strokeWidth="1.5" strokeDasharray="5,3"/>
+      <polygon points="168,111 164,101 172,101" fill={color}/>
+
+      {/* Phase 4: dog in front sit next to DH */}
+      <rect x="280" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="286" cy="51" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="295" cy="75" rx="8" ry="6" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
+      <text x="295" y="78" textAnchor="middle" fontSize="6" fill="white" fontWeight="700">전면앉아</text>
+
+      {/* Note */}
+      <rect x="10" y="186" width="340" height="26" rx="4" fill={color} opacity="0.07"/>
+      <text x="180" y="197" textAnchor="middle" fontSize="7.5" fill="#555">A단계: 앉아→와→엎드려→와 / B단계: 앉아→와→엎드려→서→와</text>
+      <text x="180" y="207" textAnchor="middle" fontSize="7.5" fill="#C0392B">10보 이상 초과해서 자세 취하면 → 해당 부분 최대 만족함(B)</text>
+    </svg>
+  );
+}
+
+// 원격조정 V단계 — PDF p.22 V단계 도식
+function SchemaSendAwayV({ color }) {
+  return (
+    <svg viewBox="0 0 300 220" style={{ width:"100%", maxWidth:300, display:"block", margin:"0 auto" }}>
+      <rect width="300" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="150" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격조정 V단계 — 2개 (PDF 3.3.11 Level V)</text>
+      {/* DH at bottom */}
+      <rect x="135" y="175" width="30" height="20" rx="4" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2"/>
+      <text x="150" y="188" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">DH·견</text>
+      {/* Start dot */}
+      <circle cx="150" cy="172" r="4" fill={color}/>
+      {/* 8.5m line to marker */}
+      <line x1="150" y1="172" x2="150" y2="145" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="162" y="160" fontSize="7.5" fill={color}>8.5m</text>
+      {/* Middle marker */}
+      <circle cx="150" cy="140" r="5" fill="#FFB300" stroke="#E65100" strokeWidth="1.5"/>
+      <text x="168" y="143" fontSize="7.5" fill="#E65100" fontWeight="700">중앙마커</text>
+      {/* 20m lines to tables */}
+      <line x1="150" y1="135" x2="80" y2="72" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
+      <line x1="150" y1="135" x2="220" y2="72" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
+      <text x="100" y="106" fontSize="7" fill={color}>20m</text>
+      <text x="195" y="106" fontSize="7" fill={color}>20m</text>
+      {/* 40m label between tables */}
+      <line x1="80" y1="64" x2="220" y2="64" stroke={color} strokeWidth="1" strokeDasharray="3,2"/>
+      <text x="150" y="60" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 40m →</text>
+      {/* Table 1 */}
+      <rect x="54" y="65" width="52" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="80" y="83" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T1</text>
+      {/* Table 2 */}
+      <rect x="194" y="65" width="52" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="220" y="83" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T2</text>
+      {/* Dog path: center → T1 → T2 → recall */}
+      <path d="M148,135 Q90,110 82,93" fill="none" stroke={color} strokeWidth="2"/>
+      <polygon points="82,93 80,103 88,100" fill={color}/>
+      <path d="M106,78 Q163,72 194,78" fill="none" stroke={color} strokeWidth="2"/>
+      <polygon points="194,78 184,76 186,84" fill={color}/>
+      {/* Recall arrow */}
+      <path d="M220,93 Q195,140 155,170" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3"/>
+      <polygon points="155,170 158,160 148,163" fill="#E53E3E"/>
+      <text x="200" y="145" fontSize="7.5" fill="#E53E3E" fontWeight="700">와!</text>
+      {/* Notes */}
+      <rect x="10" y="195" width="280" height="18" rx="4" fill={color} opacity="0.07"/>
+      <text x="150" y="207" textAnchor="middle" fontSize="7.5" fill="#555">각 T에서 최소 3초 대기 · 중앙마커 미경유 → 부족함(M)</text>
+    </svg>
+  );
+}
+
+// 원격조정 A·B단계 — PDF p.23 A·B단계 도식
+function SchemaSendAwayAB({ color }) {
+  return (
+    <svg viewBox="0 0 300 240" style={{ width:"100%", maxWidth:300, display:"block", margin:"0 auto" }}>
+      <rect width="300" height="240" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="150" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격조정 A·B단계 — 3개 (PDF 3.3.11 Level A·B)</text>
+      {/* DH at bottom */}
+      <rect x="130" y="195" width="40" height="20" rx="4" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2"/>
+      <text x="150" y="208" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">DH·견</text>
+      <circle cx="150" cy="192" r="4" fill={color}/>
+      {/* 8.45m to center */}
+      <line x1="150" y1="192" x2="150" y2="162" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="162" y="180" fontSize="7" fill={color}>8.45m</text>
+      {/* Center marker */}
+      <polygon points="150,155 145,165 155,165" fill="#E53E3E"/>
+      <circle cx="150" cy="158" r="6" fill="#FFB300" stroke="#E65100" strokeWidth="1.5"/>
+      <text x="150" y="162" textAnchor="middle" fontSize="7" fill="#E65100" fontWeight="700">중앙</text>
+      {/* Dashed arc (R=23m) */}
+      <ellipse cx="150" cy="100" rx="100" ry="80" fill="none" stroke={color} strokeWidth="1" strokeDasharray="5,3" opacity="0.4"/>
+      {/* 3 Tables at arc positions */}
+      {/* T1 top-left */}
+      <rect x="38" y="40" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="60" y="57" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T1</text>
+      {/* T2 top-right */}
+      <rect x="218" y="40" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="240" y="57" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T2</text>
+      {/* T3 right */}
+      <rect x="240" y="118" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="262" y="135" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T3</text>
+      {/* 40m labels */}
+      <line x1="60" y1="38" x2="240" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <text x="150" y="34" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 40m →</text>
+      {/* Dog path center→T1→T2→T3→recall */}
+      <path d="M147,152 Q100,120 62,66" fill="none" stroke={color} strokeWidth="2"/>
+      <polygon points="62,66 58,76 66,74" fill={color}/>
+      <path d="M82,46 Q161,36 218,46" fill="none" stroke={color} strokeWidth="2"/>
+      <polygon points="218,46 208,44 210,52" fill={color}/>
+      <path d="M258,66 Q268,100 262,118" fill="none" stroke={color} strokeWidth="2"/>
+      <polygon points="262,118 258,108 266,108" fill={color}/>
+      {/* Recall */}
+      <path d="M260,144 Q220,170 155,190" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3"/>
+      <polygon points="155,190 158,180 148,183" fill="#E53E3E"/>
+      <text x="215" y="172" fontSize="7.5" fill="#E53E3E" fontWeight="700">와!</text>
+      {/* Note */}
+      <rect x="10" y="215" width="280" height="18" rx="4" fill={color} opacity="0.07"/>
+      <text x="150" y="227" textAnchor="middle" fontSize="7.5" fill="#555">추첨 순서로 T1→T2→T3 · 각 3초 대기 · B단계는 심사위원이 순서 결정</text>
+    </svg>
+  );
+}
+
+// 터널 — PDF p.25-26 단면 도식 (하드터널+소프트튜브)
+function SchemaTunnel({ color }) {
+  return (
+    <svg viewBox="0 0 360 180" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="180" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">터널통과 구성도 (PDF 3.3.13 Tunnel with tube)</text>
+      {/* DH figure left */}
+      <rect x="18" y="70" width="14" height="22" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="25" cy="66" r="6" fill={color} opacity="0.7"/>
+      {/* Hard tunnel */}
+      <text x="105" y="40" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 300cm →</text>
+      <line x1="40" y1="38" x2="170" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <rect x="40" y="58" width="130" height="50" rx="0" fill={color} opacity="0.12" stroke={color} strokeWidth="2"/>
+      <text x="105" y="78" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">하드터널</text>
+      <text x="105" y="91" textAnchor="middle" fontSize="8" fill={color}>D=50cm</text>
+      {/* Soft tube */}
+      <text x="255" y="40" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 300cm →</text>
+      <line x1="170" y1="38" x2="340" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <rect x="170" y="58" width="170" height="50" rx="8" fill={color} opacity="0.07" stroke={color} strokeWidth="2" strokeDasharray="6,3"/>
+      <text x="255" y="78" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">소프트 튜브</text>
+      <text x="255" y="91" textAnchor="middle" fontSize="8" fill={color}>D=50cm (유연 소재)</text>
+      {/* Dog arrow through tunnel */}
+      <line x1="40" y1="83" x2="330" y2="83" stroke="#E53E3E" strokeWidth="2.5" strokeDasharray="8,4"/>
+      <polygon points="330,80 320,83 330,86" fill="#E53E3E"/>
+      <text x="185" y="130" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">→ 견 통과 방향 (좌→우)</text>
+      {/* Stay marker */}
+      <circle cx="338" cy="83" r="6" fill="#E53E3E" opacity="0.7"/>
+      <text x="338" y="86" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">멈춰</text>
+      {/* Execution note */}
+      <rect x="10" y="145" width="340" height="28" rx="4" fill={color} opacity="0.07"/>
+      <text x="180" y="156" textAnchor="middle" fontSize="7.5" fill="#555">기본자세 → '통과' 성부/시부 1회 → 터널 통과 → '멈춰' → 심사위원 지시 → 지도수 접근 → 기본자세</text>
+      <text x="180" y="167" textAnchor="middle" fontSize="7.5" fill="#C0392B">통과 후 '멈춰' 미이행 → 부족함(M) / 장애물 거부 → 0점</text>
+    </svg>
+  );
+}
+
+// 고정 나무다리 — PDF p.26 도식 (3단계 진행)
+function SchemaFixedBridge({ color }) {
+  return (
+    <svg viewBox="0 0 360 230" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="230" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">고정된 나무다리 건너기 (PDF 3.3.14 Rigid Wooden Board)</text>
+      {/* Step 1: DH left, dog jumps on */}
+      <text x="30" y="38" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가</text>
+      <rect x="10" y="55" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="17" cy="51" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="55" cy="68" rx="10" ry="7" fill={color} opacity="0.35" stroke={color} strokeWidth="1.2"/>
+      <text x="55" y="71" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">멈춰</text>
+      {/* Board 1 */}
+      <rect x="35" y="62" width="160" height="12" rx="2" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5"/>
+      {/* Supports */}
+      <rect x="35" y="74" width="10" height="20" rx="2" fill={color} opacity="0.5"/>
+      <rect x="185" y="74" width="10" height="20" rx="2" fill={color} opacity="0.5"/>
+      <text x="115" y="58" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 약 4m · 너비 30cm →</text>
+      <text x="115" y="95" textAnchor="middle" fontSize="7" fill="#888">높이 50cm</text>
+
+      {/* Step 2: DH alongside dog */}
+      <text x="30" y="125" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② 계속</text>
+      <rect x="10" y="140" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="17" cy="136" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="130" cy="149" rx="10" ry="7" fill={color} opacity="0.35" stroke={color} strokeWidth="1.2"/>
+      <rect x="35" y="143" width="160" height="12" rx="2" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5"/>
+      <rect x="35" y="155" width="10" height="18" rx="2" fill={color} opacity="0.5"/>
+      <rect x="185" y="155" width="10" height="18" rx="2" fill={color} opacity="0.5"/>
+      <text x="25" y="152" fontSize="7" fill={color}>동반</text>
+
+      {/* Step 3: DH right, dog off board → GS */}
+      <text x="30" y="200" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ 기본자세</text>
+      <rect x="185" y="208" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="192" cy="204" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="230" cy="215" rx="10" ry="7" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
+      <text x="230" y="218" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">GS</text>
+      <rect x="35" y="208" width="160" height="12" rx="2" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <rect x="35" y="220" width="10" height="10" rx="2" fill={color} opacity="0.4"/>
+      <rect x="185" y="220" width="10" height="10" rx="2" fill={color} opacity="0.4"/>
+
+      {/* V marker */}
+      <text x="200" y="145" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+
+      {/* Note */}
+      <rect x="220" y="130" width="130" height="40" rx="5" fill={color} opacity="0.07" stroke={color} strokeWidth="1"/>
+      <text x="285" y="143" textAnchor="middle" fontSize="7" fill="#555">전반부 뛰어내리면 0점</text>
+      <text x="285" y="153" textAnchor="middle" fontSize="7" fill="#555">후반부 뛰어내리면</text>
+      <text x="285" y="163" textAnchor="middle" fontSize="7" fill="#C0392B">부족함(M)</text>
+    </svg>
+  );
+}
+
+// 비고정 나무다리 — PDF p.27-28 도식
+function SchemaMovingBridge({ color }) {
+  return (
+    <svg viewBox="0 0 340 200" style={{ width:"100%", maxWidth:340, display:"block", margin:"0 auto" }}>
+      <rect width="340" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="170" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">비고정 나무다리 (PDF 3.3.15 Unstable Plank · A단계 전용)</text>
+      {/* Step 1 */}
+      <text x="25" y="38" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가→멈춰</text>
+      <rect x="8" y="52" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="15" cy="48" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="60" cy="64" rx="10" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="60" y="67" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">멈춰</text>
+      {/* Barrel 1 */}
+      <ellipse cx="55" cy="82" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
+      <text x="55" y="86" textAnchor="middle" fontSize="7" fill={color}>Ø40cm</text>
+      {/* Board */}
+      <rect x="35" y="58" width="200" height="12" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="2"/>
+      <text x="135" y="52" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 4m (이동폭 20cm) →</text>
+      {/* Barrel 2 */}
+      <ellipse cx="215" cy="82" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
+      <text x="215" y="86" textAnchor="middle" fontSize="7" fill={color}>Ø40cm</text>
+      {/* V marker */}
+      <text x="220" y="64" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+
+      {/* Step 2 */}
+      <text x="25" y="115" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② 계속 (동반)</text>
+      <rect x="8" y="128" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="15" cy="124" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="160" cy="138" rx="10" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <rect x="35" y="132" width="200" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="2"/>
+      <ellipse cx="55" cy="152" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
+      <ellipse cx="215" cy="152" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
+
+      {/* Step 3: DH right side, dog on end */}
+      <text x="25" y="180" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ 하강→기본자세</text>
+      <rect x="230" y="175" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="237" cy="171" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="265" cy="183" rx="10" ry="7" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
+      <text x="265" y="186" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">GS</text>
+
+      {/* Note */}
+      <rect x="240" y="98" width="90" height="32" rx="5" fill={color} opacity="0.07" stroke={color} strokeWidth="1"/>
+      <text x="285" y="110" textAnchor="middle" fontSize="7" fill="#555">전반부 이탈 → 0점</text>
+      <text x="285" y="120" textAnchor="middle" fontSize="7" fill="#C0392B">후반부 이탈 →</text>
+      <text x="285" y="128" textAnchor="middle" fontSize="7" fill="#C0392B">부족함(M)</text>
+    </svg>
+  );
+}
+
+// 사다리 — PDF p.29 치수 + 3단계 진행 도식
+function SchemaLadder({ color }) {
+  return (
+    <svg viewBox="0 0 360 250" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="250" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">사다리 건너기 (PDF 3.3.16 Horizontal Ladder)</text>
+      {/* Dimensions label */}
+      <text x="165" y="32" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 395cm (14 디딤대, 간격 30cm) →</text>
+      {/* Step 1: dog going on ramp */}
+      <text x="18" y="48" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가</text>
+      {/* Ramp */}
+      <line x1="30" y1="80" x2="60" y2="58" stroke={color} strokeWidth="3" strokeLinecap="round"/>
+      {/* Ladder beams */}
+      <line x1="60" y1="58" x2="60" y2="68" stroke={color} strokeWidth="2.5"/>
+      <line x1="300" y1="58" x2="300" y2="68" stroke={color} strokeWidth="2.5"/>
+      <line x1="60" y1="58" x2="300" y2="58" stroke={color} strokeWidth="2.5"/>
+      <line x1="60" y1="68" x2="300" y2="68" stroke={color} strokeWidth="2.5"/>
+      {/* Rungs */}
+      {Array.from({length:14}).map((_,i)=>(
+        <line key={i} x1={60+i*17.1} y1="58" x2={60+i*17.1} y2="68" stroke={color} strokeWidth="1.2" opacity="0.5"/>
+      ))}
+      {/* Supports */}
+      <rect x="52" y="68" width="16" height="16" rx="2" fill={color} opacity="0.4"/>
+      <rect x="292" y="68" width="16" height="16" rx="2" fill={color} opacity="0.4"/>
+      <text x="60" y="93" textAnchor="middle" fontSize="7" fill="#888">50cm</text>
+      <text x="300" y="93" textAnchor="middle" fontSize="7" fill="#888">50cm</text>
+      {/* DH figure & dog step1 */}
+      <rect x="6" y="64" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="13" cy="60" r="5" fill={color} opacity="0.7"/>
+      <ellipse cx="75" cy="52" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+
+      {/* Step 2: DH alongside A-level */}
+      <text x="18" y="120" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② A: 동반</text>
+      <rect x="6" y="133" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="13" cy="129" r="5" fill={color} opacity="0.7"/>
+      <line x1="60" y1="127" x2="300" y2="127" stroke={color} strokeWidth="2.5"/>
+      <line x1="60" y1="137" x2="300" y2="137" stroke={color} strokeWidth="2.5"/>
+      {Array.from({length:14}).map((_,i)=>(
+        <line key={i} x1={60+i*17.1} y1="127" x2={60+i*17.1} y2="137" stroke={color} strokeWidth="1.2" opacity="0.5"/>
+      ))}
+      <rect x="52" y="137" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
+      <rect x="292" y="137" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
+      <ellipse cx="170" cy="121" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      {/* V marker for A level */}
+      <text x="300" y="152" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+
+      {/* Step 3: DH waits B-level, then lifts dog */}
+      <text x="18" y="185" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ B: 대기→접근</text>
+      <rect x="6" y="198" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
+      <circle cx="13" cy="194" r="5" fill={color} opacity="0.7"/>
+      <line x1="60" y1="195" x2="300" y2="195" stroke={color} strokeWidth="2.5"/>
+      <line x1="60" y1="205" x2="300" y2="205" stroke={color} strokeWidth="2.5"/>
+      {Array.from({length:14}).map((_,i)=>(
+        <line key={i} x1={60+i*17.1} y1="195" x2={60+i*17.1} y2="205" stroke={color} strokeWidth="1.2" opacity="0.5"/>
+      ))}
+      <rect x="52" y="205" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
+      <rect x="292" y="205" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
+      <ellipse cx="285" cy="189" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <rect x="302" y="193" width="40" height="18" rx="4" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
+      <text x="322" y="205" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">들어 내림</text>
+      {/* Note */}
+      <rect x="6" y="225" width="348" height="18" rx="4" fill={color} opacity="0.07"/>
+      <text x="180" y="237" textAnchor="middle" fontSize="7.5" fill="#555">전반부 이탈→0점 · 후반부 이탈→부족함(M) · 마지막 디딤대 후 이탈→최대 만족함(B)</text>
+    </svg>
+  );
+}
+
+// 그네 — PDF p.30-31 도식
+function SchemaSeesaw({ color }) {
+  return (
+    <svg viewBox="0 0 360 220" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
+      <rect width="360" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">그네 건너기 (PDF 3.3.17 Swing · B단계 전용)</text>
+      {/* Dimensions */}
+      <text x="185" y="34" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">L=300cm, B=30cm</text>
+      <text x="185" y="44" textAnchor="middle" fontSize="7.5" fill={color}>H=40cm</text>
+      {/* Support frames */}
+      <line x1="60" y1="50" x2="60" y2="110" stroke={color} strokeWidth="3"/>
+      <line x1="55" y1="50" x2="65" y2="50" stroke={color} strokeWidth="2"/>
+      <line x1="50" y1="55" x2="70" y2="55" stroke={color} strokeWidth="1.5"/>
+      <line x1="310" y1="50" x2="310" y2="110" stroke={color} strokeWidth="3"/>
+      <line x1="305" y1="50" x2="315" y2="50" stroke={color} strokeWidth="2"/>
+      <line x1="300" y1="55" x2="320" y2="55" stroke={color} strokeWidth="1.5"/>
+      {/* Chains */}
+      <line x1="60" y1="55" x2="70" y2="95" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
+      <line x1="310" y1="55" x2="300" y2="95" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
+      {/* Moving plank */}
+      <rect x="70" y="90" width="230" height="14" rx="4" fill={color} opacity="0.3" stroke={color} strokeWidth="2"/>
+      <text x="185" y="101" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 3m 널빤지 (자유 이동 ~25cm) →</text>
+      {/* Bracing */}
+      <line x1="70" y1="110" x2="50" y2="130" stroke={color} strokeWidth="1.5"/>
+      <line x1="300" y1="110" x2="320" y2="130" stroke={color} strokeWidth="1.5"/>
+      {/* Mounting ramps */}
+      <rect x="18" y="118" width="55" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="45" y="128" textAnchor="middle" fontSize="7" fill={color}>탑승판(150cm)</text>
+      <rect x="297" y="118" width="55" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
+      <text x="324" y="128" textAnchor="middle" fontSize="7" fill={color}>하강판(150cm)</text>
+      {/* Execution arrows */}
+      <text x="20" y="152" fontSize="8" fill={color} fontWeight="700">GS →</text>
+      <text x="55" y="152" fontSize="8" fill={color}>올라가·멈춰</text>
+      <text x="140" y="152" fontSize="8" fill={color}>→ 계속 →</text>
+      <text x="240" y="152" fontSize="8" fill={color}>내려가</text>
+      <text x="305" y="152" fontSize="8" fill={color}>→ GS</text>
+      {/* Dimension annotations */}
+      <line x1="10" y1="100" x2="10" y2="130" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
+      <text x="15" y="118" fontSize="7" fill="#888">~160cm</text>
+      <text x="15" y="128" fontSize="7" fill="#888">~135cm</text>
+      <text x="130" y="140" textAnchor="middle" fontSize="7" fill="#888">~100cm</text>
+      <text x="290" y="140" textAnchor="middle" fontSize="7" fill="#888">~50cm</text>
+      {/* Note */}
+      <rect x="10" y="160" width="340" height="28" rx="4" fill={color} opacity="0.07"/>
+      <text x="180" y="171" textAnchor="middle" fontSize="7.5" fill="#555">전반부 이탈→0점 / 후반부 이탈→부족함(M)</text>
+      <text x="180" y="182" textAnchor="middle" fontSize="7.5" fill="#555">유사 구조물(같은 치수·이동폭) 허용 · 종단 이동 25cm 이내 제한 가능</text>
+    </svg>
+  );
+}
+
+// 대기 도식
+function SchemaWait({ color }) {
+  return (
+    <svg viewBox="0 0 320 155" style={{ width:"100%", maxWidth:320, display:"block", margin:"0 auto" }}>
+      <rect width="320" height="155" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="160" y="17" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">산만한 상황에서의 대기 — 단계별 위치 (PDF 3.3.12)</text>
+      <text x="35" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">V단계</text>
+      <circle cx="20" cy="85" r="8" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="20" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
+      <circle cx="62" cy="85" r="8" fill={color} opacity="0.7"/>
+      <text x="62" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">DH</text>
+      <line x1="28" y1="85" x2="54" y2="85" stroke={color} strokeWidth="1.5"/>
+      <text x="41" y="100" textAnchor="middle" fontSize="7.5" fill="#555">20보 (정면)</text>
+      <text x="115" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">A단계</text>
+      <circle cx="95" cy="85" r="8" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="95" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
+      <circle cx="150" cy="85" r="8" fill={color} opacity="0.7"/>
+      <text x="150" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">DH</text>
+      <line x1="103" y1="85" x2="142" y2="85" stroke={color} strokeWidth="1.5"/>
+      <text x="125" y="100" textAnchor="middle" fontSize="7.5" fill="#555">40보 (등 돌림)</text>
+      <text x="240" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">B단계</text>
+      <circle cx="200" cy="85" r="8" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+      <text x="200" y="89" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">견</text>
+      <rect x="258" y="72" width="30" height="28" rx="4" fill="#555" opacity="0.5"/>
+      <text x="273" y="90" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">은폐</text>
+      <line x1="208" y1="85" x2="258" y2="85" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
+      <text x="234" y="100" textAnchor="middle" fontSize="7.5" fill="#555">완전 은폐</text>
+      <rect x="10" y="120" width="300" height="28" rx="4" fill={color} opacity="0.07"/>
+      <text x="160" y="131" textAnchor="middle" fontSize="7.5" fill="#555">2번째 과목 완료 후 3m 이상 이탈 → 부족함(M)</text>
+      <text x="160" y="142" textAnchor="middle" fontSize="7.5" fill="#C0392B">2번째 과목 이전에 3m 이상 이탈 → 0점</text>
+    </svg>
+  );
+}
+
+// 수상 원격조정 도식
+function SchemaWaterRemote({ color }) {
+  return (
+    <svg viewBox="0 0 310 175" style={{ width:"100%", maxWidth:310, display:"block", margin:"0 auto" }}>
+      <rect width="310" height="175" rx="10" fill="#E1F5FE" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="155" y="17" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">수상 원격조정 (PDF 3.3.24 Directability at Distance)</text>
+      <rect x="8" y="125" width="62" height="22" rx="4" fill="#1A1E2E" opacity="0.7"/>
+      <text x="39" y="139" textAnchor="middle" fontSize="9" fill="white" fontWeight="700">지도수(육지)</text>
+      <rect x="162" y="28" width="52" height="22" rx="4" fill={color} opacity="0.8"/>
+      <text x="188" y="43" textAnchor="middle" fontSize="9" fill="white" fontWeight="700">보트1</text>
+      <rect x="238" y="100" width="52" height="22" rx="4" fill={color} opacity="0.8"/>
+      <text x="264" y="115" textAnchor="middle" fontSize="9" fill="white" fontWeight="700">보트2</text>
+      <circle cx="100" cy="95" r="9" fill="#FFB300" opacity="0.9" stroke="#E65100" strokeWidth="1.5"/>
+      <text x="100" y="99" textAnchor="middle" fontSize="9" fill="#7A5000" fontWeight="700">견</text>
+      <line x1="70" y1="130" x2="94" y2="100" stroke="#1A1E2E" strokeWidth="1.5" strokeDasharray="4,2"/>
+      <line x1="109" y1="90" x2="167" y2="47" stroke={color} strokeWidth="2"/>
+      <polygon points="167,47 161,52 169,57" fill={color}/>
+      <line x1="210" y1="47" x2="241" y2="100" stroke={color} strokeWidth="2"/>
+      <polygon points="241,100 235,95 246,96" fill={color}/>
+      <line x1="246" y1="114" x2="72" y2="130" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3"/>
+      <polygon points="72,127 79,130 72,133" fill="#E53E3E"/>
+      <text x="155" y="155" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">마지막 지점 후 '와' → 전면앉아</text>
+      <text x="155" y="166" textAnchor="middle" fontSize="7.5" fill="#888">A단계=20m · B단계=40m 거리</text>
     </svg>
   );
 }
