@@ -487,7 +487,7 @@ const procedureMap = {
       "성부 1회로 종료기본자세",
     ],
     note: "테이블 크기: 100×100cm, 높이 60cm. 각 자세에서 약 3초 대기.",
-    schema: null,
+    schema: "positionChange",
   },
   "자세변경 (눈덩이·자연높이)": {
     summary: "눈사태 V단계. 테이블 대신 눈덩이나 자연 높이 차이를 활용합니다.",
@@ -527,7 +527,7 @@ const procedureMap = {
       "[A·B단계] 내려놓은 후 '와' 신호 → 전면 앉아 → 종료기본자세",
     ],
     note: "도중 뛰어내리면 부족함(M). 지도수가 들 수 없으면 도우미가 대신.",
-    schema: null,
+    schema: "carryHandover",
   },
   "산만한 상황에서의 대기": {
     summary: "다른 팀이 과목을 수행하는 동안 견이 조용히 엎드려 대기합니다.",
@@ -613,621 +613,1120 @@ const procedureMap = {
 };
 
 
-// ── SVG 도식 컴포넌트 (PDF 원본 충실 재현)
+// ── SVG 도식 컴포넌트 — PDF 원본 이미지 충실 재현
 
-// 사회성 테스트 — PDF p.14 그룹 동선 도식
+// Image 1: 사회성 테스트 — 그룹 동선 (stop·group starts·group stops 범례)
 function SchemaSocialTest({ color }) {
   return (
-    <svg viewBox="0 0 360 260" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="260" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">시작보고 및 사회성 테스트 — 그룹 동선 도식 (PDF 3.3.4)</text>
-      {/* Outer circle (DH path) */}
-      <circle cx="180" cy="140" r="80" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="5,3" opacity="0.4"/>
-      {/* Inner circle (group) */}
-      <circle cx="180" cy="140" r="55" fill="none" stroke={color} strokeWidth="1.5" opacity="0.5"/>
-      <text x="180" y="100" textAnchor="middle" fontSize="8" fill={color} opacity="0.6">내부원 r=2m</text>
-      <text x="180" y="228" textAnchor="middle" fontSize="8" fill={color} opacity="0.5">외부원 r=3m</text>
-      {/* Group people on inner circle */}
-      {[0,120,240].map((deg,i)=>{
-        const r=55, rad=(deg-90)*Math.PI/180;
-        const x=180+r*Math.cos(rad), y=140+r*Math.sin(rad);
-        return <g key={i}>
-          <circle cx={x} cy={y} r="8" fill={color} opacity="0.25" stroke={color} strokeWidth="1.2"/>
-          <text x={x} y={y+3.5} textAnchor="middle" fontSize="7" fill={color} fontWeight="700">HP</text>
-        </g>;
-      })}
-      {/* Test dog on inner circle */}
-      <circle cx="180" cy="85" r="9" fill={color} opacity="0.6"/>
-      <text x="180" y="89" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">견</text>
-      {/* DH on outer circle */}
-      <circle cx="180" cy="60" r="9" fill="#1A1E2E" opacity="0.8"/>
-      <text x="180" y="64" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">DH</text>
-      {/* Counterclockwise arrow */}
-      <path d="M 245,120 A 70,70 0 0,0 180,70" fill="none" stroke={color} strokeWidth="2" markerEnd="url(#arr)"/>
-      <defs>
-        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill={color}/>
-        </marker>
-      </defs>
-      {/* Figure-8 arrow indication */}
-      <text x="180" y="175" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">8자 동선으로 통과</text>
+    <svg viewBox="0 0 500 280" style={{ width:"100%", maxWidth:500, display:"block", margin:"0 auto" }}>
+      <rect width="500" height="280" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="250" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">시작보고 및 사회성 테스트 (PDF 3.3.4)</text>
+
       {/* Legend */}
-      <rect x="10" y="230" width="340" height="22" rx="4" fill={color} opacity="0.08"/>
-      <text x="180" y="245" textAnchor="middle" fontSize="8" fill="#555">그룹(반시계 방향 이동) → RDT가 카운터 방향 이동 → 그룹 통과 → 8자 동선</text>
+      <circle cx="22" cy="40" r="6" fill="#222"/>
+      <text x="32" y="44" fontSize="9" fill="#333">stop</text>
+      <circle cx="22" cy="58" r="6" fill="none" stroke="#c00" strokeWidth="2"/>
+      <text x="32" y="62" fontSize="9" fill="#333">group starts</text>
+      <rect x="16" y="70" width="12" height="12" fill="none" stroke="#c00" strokeWidth="2"/>
+      <text x="32" y="80" fontSize="9" fill="#333">group stops</text>
+
+      {/* DH + dog at lower left walking to group */}
+      {/* DH silhouette */}
+      <rect x="28" y="175" width="12" height="28" rx="3" fill="#222"/>
+      <circle cx="34" cy="170" r="7" fill="#222"/>
+      {/* Dog */}
+      <ellipse cx="54" cy="195" rx="10" ry="7" fill="#555"/>
+      {/* Dashed green line: DH approach path */}
+      <line x1="66" y1="195" x2="238" y2="195" stroke="#4a7c4e" strokeWidth="2" strokeDasharray="8,4"/>
+      {/* Arrow right */}
+      <polygon points="238,191 248,195 238,199" fill="#4a7c4e"/>
+      {/* group starts circle at mid-path */}
+      <circle cx="165" cy="195" r="8" fill="none" stroke="#c00" strokeWidth="2"/>
+
+      {/* Group circle (right side) */}
+      {/* Outer dashed green circle (DH path) */}
+      <circle cx="330" cy="155" r="85" fill="none" stroke="#4a7c4e" strokeWidth="2.5" strokeDasharray="8,4"/>
+      {/* Inner red dashed circle (group path) */}
+      <circle cx="330" cy="155" r="55" fill="none" stroke="#c00" strokeWidth="2" strokeDasharray="6,4"/>
+
+      {/* Group people around inner circle */}
+      {/* Top person */}
+      <rect x="322" y="78" width="10" height="22" rx="3" fill="#222"/>
+      <circle cx="327" cy="74" r="6" fill="#222"/>
+      {/* Right person */}
+      <rect x="378" y="142" width="10" height="22" rx="3" fill="#222"/>
+      <circle cx="383" cy="138" r="6" fill="#222"/>
+      {/* Bottom person */}
+      <rect x="322" y="208" width="10" height="22" rx="3" fill="#222"/>
+      <circle cx="327" cy="204" r="6" fill="#222"/>
+
+      {/* Test dog in group */}
+      <ellipse cx="310" cy="175" rx="11" ry="8" fill="#888"/>
+      <text x="310" y="179" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">견</text>
+
+      {/* DH in center */}
+      <rect x="322" y="143" width="10" height="20" rx="3" fill="#222"/>
+      <circle cx="327" cy="139" r="5" fill="#222"/>
+
+      {/* stop dot center */}
+      <circle cx="327" cy="158" r="6" fill="#222"/>
+
+      {/* group stops square (right side of outer circle) */}
+      <rect x="410" y="147" width="12" height="12" fill="none" stroke="#c00" strokeWidth="2"/>
+      <circle cx="416" cy="153" r="4" fill="#222"/>
+
+      {/* Green arrows around outer circle (clockwise direction cues) */}
+      {[30, 90, 150, 210, 270, 330].map((deg, i) => {
+        const r = 85, cx2 = 330, cy2 = 155;
+        const rad = (deg - 90) * Math.PI / 180;
+        const x = cx2 + r * Math.cos(rad), y = cy2 + r * Math.sin(rad);
+        const rad2 = (deg - 60) * Math.PI / 180;
+        const dx = Math.cos(rad2) * 10, dy = Math.sin(rad2) * 10;
+        return <polygon key={i} points={`${x},${y} ${x-dx-dy*0.4},${y-dy+dx*0.4} ${x-dx+dy*0.4},${y-dy-dx*0.4}`} fill="#4a7c4e"/>;
+      })}
+
+      {/* Red arrows inside (group direction) */}
+      {[60, 180, 300].map((deg, i) => {
+        const r = 55, cx2 = 330, cy2 = 155;
+        const rad = (deg - 90) * Math.PI / 180;
+        const x = cx2 + r * Math.cos(rad), y = cy2 + r * Math.sin(rad);
+        const rad2 = (deg - 60) * Math.PI / 180;
+        const dx = Math.cos(rad2) * 9, dy = Math.sin(rad2) * 9;
+        return <polygon key={i} points={`${x},${y} ${x-dx-dy*0.4},${y-dy+dx*0.4} ${x-dx+dy*0.4},${y-dy-dx*0.4}`} fill="#c00"/>;
+      })}
+
+      {/* Figure-8 path indication (red arrow from dog area curving) */}
+      <path d="M310,167 Q295,185 310,195" fill="none" stroke="#c00" strokeWidth="1.5" strokeDasharray="3,2"/>
+      <polygon points="310,195 305,186 315,187" fill="#c00"/>
+
+      <text x="250" y="262" textAnchor="middle" fontSize="8" fill="#555">그룹(반시계)과 RDT가 교차 → 8자 동선으로 그룹 통과 → DH 그룹 중앙 정지</text>
     </svg>
   );
 }
 
-// 줄메고 따라걷기 — PDF p.16 공식 도식 (On-leash heeling)
+// Image 13: 줄메고/줄없이 따라걷기 — 공식 경로 도식 (approx.40 normal / 50 normal paces, RW/LW/KW)
 function SchemaLeashedHeeling({ color }) {
   return (
-    <svg viewBox="0 0 400 300" style={{ width:"100%", maxWidth:400, display:"block", margin:"0 auto" }}>
-      <rect width="400" height="300" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="200" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">줄메고 따라걷기 경로 도식 (PDF 3.3.5 On-leash Heeling)</text>
-      {/* Main path faithful to PDF */}
-      {/* Start bottom right, go up ~50 paces */}
-      <line x1="300" y1="260" x2="300" y2="100" stroke={color} strokeWidth="2"/>
-      <polygon points="300,93 296,105 304,105" fill={color}/>
-      {/* KW (U-turn) */}
-      <path d="M300,100 Q300,78 278,78" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="318" y="96" fontSize="8" fill={color} fontWeight="700">KW</text>
+    <svg viewBox="0 0 520 420" style={{ width:"100%", maxWidth:520, display:"block", margin:"0 auto" }}>
+      <rect width="520" height="420" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="260" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">줄메고 따라걷기 경로 (PDF 3.3.5 On-leash)</text>
+
+      {/* Female dog marker top-left */}
+      <ellipse cx="68" cy="68" rx="10" ry="7" fill="#222" opacity="0.7"/>
+      <circle cx="60" cy="60" r="5" fill="#222"/>
+      <text x="90" y="65" fontSize="9" fill="#333">female dog</text>
+      <ellipse cx="68" cy="98" rx="10" ry="7" fill="#222" opacity="0.5"/>
+      <circle cx="60" cy="90" r="5" fill="#222"/>
+      <text x="90" y="95" fontSize="9" fill="#333">male dog</text>
+      {/* 6m bracket */}
+      <line x1="56" y1="66" x2="56" y2="96" stroke="#c00" strokeWidth="1.5"/>
+      <text x="40" y="84" fontSize="9" fill="#c00" fontWeight="700">6 m</text>
+
+      {/* approx 40 normal label top */}
+      <text x="350" y="38" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">approx. 40 normal</text>
+      <line x1="195" y1="42" x2="505" y2="42" stroke="#c00" strokeWidth="1.5" strokeDasharray="4,3"/>
+      <circle cx="195" cy="42" r="4" fill="#222"/>
+      <circle cx="505" cy="42" r="4" fill="#222"/>
+
+      {/* Main route — faithful to Image 13 */}
+      {/* Start: bottom right, DH+dog silhouettes */}
+      {/* DH start bottom right */}
+      <rect x="454" y="355" width="12" height="24" rx="3" fill="#222"/>
+      <circle cx="460" cy="350" r="7" fill="#222"/>
+      <rect x="470" y="358" width="12" height="20" rx="3" fill="#222" opacity="0.6"/>
+      <circle cx="476" cy="354" r="6" fill="#222" opacity="0.6"/>
+
+      {/* approx 50 normal paces — go up */}
+      <line x1="460" y1="350" x2="460" y2="120" stroke="#222" strokeWidth="2.5"/>
+      <polygon points="460,113 456,125 464,125" fill="#222"/>
+      <text x="472" y="240" fontSize="8.5" fill="#222" transform="rotate(90,472,240)">approx. 50 normal paces</text>
+
+      {/* KW (u-turn) top right */}
+      <path d="M460,120 Q460,95 435,95" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <text x="468" y="108" fontSize="9" fill="#222" fontWeight="700">KW</text>
+
+      {/* 10-15 normal paces left after KW */}
+      <line x1="435" y1="95" x2="360" y2="95" stroke="#222" strokeWidth="2.5"/>
+      <text x="395" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 normal paces</text>
+
       {/* fast pace section */}
-      <line x1="278" y1="78" x2="195" y2="78" stroke={color} strokeWidth="2" strokeDasharray="5,2"/>
-      <text x="235" y="72" textAnchor="middle" fontSize="7.5" fill={color}>속보 10-15보</text>
-      {/* slow pace */}
-      <line x1="195" y1="78" x2="120" y2="78" stroke={color} strokeWidth="2" strokeDasharray="2,2"/>
-      <text x="157" y="72" textAnchor="middle" fontSize="7.5" fill={color}>완보 10-15보</text>
-      {/* normal pace back */}
-      <line x1="120" y1="78" x2="70" y2="78" stroke={color} strokeWidth="2"/>
-      {/* RW (right turn 1) */}
-      <path d="M70,78 Q50,78 50,98" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="20" y="96" fontSize="8" fill={color} fontWeight="700">RW</text>
-      {/* 20-25 paces down */}
-      <line x1="50" y1="98" x2="50" y2="168" stroke={color} strokeWidth="2"/>
-      <text x="15" y="132" fontSize="7.5" fill={color}>20-25보</text>
-      {/* RW (right turn 2) */}
-      <path d="M50,168 Q50,188 70,188" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="20" y="186" fontSize="8" fill={color} fontWeight="700">RW</text>
-      {/* 25-30 paces right */}
-      <line x1="70" y1="188" x2="200" y2="188" stroke={color} strokeWidth="2"/>
-      <text x="135" y="200" textAnchor="middle" fontSize="7.5" fill={color}>25-30보</text>
-      {/* KW (U-turn bottom) */}
-      <path d="M200,188 Q220,188 220,168" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="225" y="186" fontSize="8" fill={color} fontWeight="700">KW</text>
-      <line x1="220" y1="168" x2="220" y2="138" stroke={color} strokeWidth="2"/>
-      {/* 10-15 paces + GS */}
-      <text x="230" y="155" fontSize="7.5" fill={color}>10-15보</text>
-      <rect x="208" y="128" width="24" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
-      <text x="220" y="137" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">GS</text>
-      {/* LW left turn */}
-      <path d="M220,128 Q220,108 200,108" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="225" y="115" fontSize="8" fill={color} fontWeight="700">LW</text>
-      <line x1="200" y1="108" x2="70" y2="108" stroke={color} strokeWidth="2"/>
-      <text x="135" y="120" textAnchor="middle" fontSize="7.5" fill={color}>20-25보</text>
-      {/* Start/End marker */}
-      <circle cx="300" cy="260" r="7" fill={color}/>
-      <text x="300" y="278" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START / END</text>
-      {/* Down area markers for male/female dog */}
-      <ellipse cx="90" cy="260" rx="12" ry="8" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
-      <text x="90" y="263" textAnchor="middle" fontSize="7" fill={color}>♂견</text>
-      <ellipse cx="120" cy="254" rx="12" ry="8" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
-      <text x="120" y="257" textAnchor="middle" fontSize="7" fill={color}>♀견</text>
-      <text x="105" y="282" textAnchor="middle" fontSize="7" fill="#888">대기 위치 (약 6m 간격)</text>
-      {/* Leash badge */}
-      <rect x="290" y="230" width="100" height="16" rx="5" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
-      <text x="340" y="241" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">🦮 줄 착용 (V단계)</text>
+      <line x1="360" y1="95" x2="285" y2="95" stroke="#222" strokeWidth="2" strokeDasharray="6,3"/>
+      <text x="320" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 fast paces</text>
+
+      {/* slow pace section */}
+      <line x1="285" y1="95" x2="215" y2="95" stroke="#222" strokeWidth="2" strokeDasharray="3,3"/>
+      <text x="250" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 slow paces</text>
+
+      {/* normal paces back */}
+      <line x1="215" y1="95" x2="195" y2="95" stroke="#222" strokeWidth="2.5"/>
+      <text x="165" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 normal paces</text>
+
+      {/* RW right turn going down */}
+      <path d="M195,95 Q175,95 175,118" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <text x="148" y="112" fontSize="9" fill="#222" fontWeight="700">KW</text>
+
+      {/* 10-15 normal paces down left side */}
+      <line x1="175" y1="118" x2="175" y2="200" stroke="#222" strokeWidth="2.5"/>
+      <text x="140" y="162" fontSize="8" fill="#222" transform="rotate(90,140,162)">10 – 15 normal paces</text>
+
+      {/* RW turn */}
+      <circle cx="175" cy="200" r="4" fill="#222"/>
+
+      {/* 25-30 normal paces down */}
+      <line x1="175" y1="204" x2="175" y2="320" stroke="#222" strokeWidth="2.5"/>
+      <text x="140" y="265" fontSize="8" fill="#222" transform="rotate(90,140,265)">25 – 30 normal paces</text>
+
+      {/* RW bottom left */}
+      <text x="148" y="332" fontSize="9" fill="#222" fontWeight="700">RW</text>
+      <path d="M175,320 Q175,340 198,340" fill="none" stroke="#222" strokeWidth="2.5"/>
+
+      {/* 20-25 normal paces right (bottom) */}
+      <line x1="198" y1="340" x2="340" y2="340" stroke="#222" strokeWidth="2.5"/>
+      <text x="268" y="355" textAnchor="middle" fontSize="8" fill="#222">20 - 25 normal paces</text>
+
+      {/* LW bottom left area */}
+      <text x="148" y="358" fontSize="9" fill="#222" fontWeight="700">LW</text>
+      <line x1="198" y1="356" x2="340" y2="356" stroke="#222" strokeWidth="2.5"/>
+      <text x="268" y="370" textAnchor="middle" fontSize="8" fill="#222">20 - 25 normal paces</text>
+
+      {/* RW bottom right */}
+      <text x="346" y="332" fontSize="9" fill="#222" fontWeight="700">RW</text>
+      <path d="M340,340 Q360,340 360,318" fill="none" stroke="#222" strokeWidth="2.5"/>
+
+      {/* up right side 10-15 + 10-15 */}
+      <line x1="360" y1="318" x2="360" y2="230" stroke="#222" strokeWidth="2.5"/>
+      <text x="375" y="278" fontSize="8" fill="#222" transform="rotate(90,375,278)">10 – 15 normal paces</text>
+      <circle cx="360" cy="230" r="4" fill="#222"/>
+      <line x1="360" y1="226" x2="360" y2="160" stroke="#222" strokeWidth="2.5"/>
+      <text x="375" y="196" fontSize="8" fill="#222" transform="rotate(90,375,196)">10 – 15 normal paces</text>
+
+      {/* Final DH position top right side */}
+      <rect x="348" y="42" width="12" height="24" rx="3" fill="#222"/>
+      <circle cx="354" cy="38" r="7" fill="#222"/>
+      <text x="380" y="55" fontSize="9" fill="#222" fontWeight="700">DH</text>
+
+      {/* Legend bottom */}
+      <text x="30" y="395" fontSize="9" fill="#333" fontWeight="700">RW = right turn</text>
+      <text x="30" y="408" fontSize="9" fill="#333" fontWeight="700">LW = left turn</text>
+      <text x="160" y="395" fontSize="9" fill="#333" fontWeight="700">KW = u-turn</text>
     </svg>
   );
 }
 
-// 줄없이 따라걷기 — PDF p.16 공식 도식 (Off-leash heeling)
 function SchemaHeeling({ color }) {
   return (
-    <svg viewBox="0 0 400 300" style={{ width:"100%", maxWidth:400, display:"block", margin:"0 auto" }}>
-      <rect width="400" height="300" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="200" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">줄없이 따라걷기 경로 도식 (PDF 3.3.5 Off-leash Heeling)</text>
-      <line x1="300" y1="260" x2="300" y2="100" stroke={color} strokeWidth="2"/>
-      <polygon points="300,93 296,105 304,105" fill={color}/>
-      <path d="M300,100 Q300,78 278,78" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="318" y="96" fontSize="8" fill={color} fontWeight="700">KW</text>
-      <line x1="278" y1="78" x2="195" y2="78" stroke={color} strokeWidth="2" strokeDasharray="5,2"/>
-      <text x="235" y="72" textAnchor="middle" fontSize="7.5" fill={color}>속보 10-15보</text>
-      <line x1="195" y1="78" x2="120" y2="78" stroke={color} strokeWidth="2" strokeDasharray="2,2"/>
-      <text x="157" y="72" textAnchor="middle" fontSize="7.5" fill={color}>완보 10-15보</text>
-      <line x1="120" y1="78" x2="70" y2="78" stroke={color} strokeWidth="2"/>
-      <path d="M70,78 Q50,78 50,98" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="20" y="96" fontSize="8" fill={color} fontWeight="700">RW</text>
-      <line x1="50" y1="98" x2="50" y2="168" stroke={color} strokeWidth="2"/>
-      <text x="15" y="132" fontSize="7.5" fill={color}>20-25보</text>
-      <path d="M50,168 Q50,188 70,188" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="20" y="186" fontSize="8" fill={color} fontWeight="700">RW</text>
-      <line x1="70" y1="188" x2="200" y2="188" stroke={color} strokeWidth="2"/>
-      <text x="135" y="200" textAnchor="middle" fontSize="7.5" fill={color}>25-30보</text>
-      <path d="M200,188 Q220,188 220,168" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="225" y="186" fontSize="8" fill={color} fontWeight="700">KW</text>
-      <line x1="220" y1="168" x2="220" y2="138" stroke={color} strokeWidth="2"/>
-      <text x="230" y="155" fontSize="7.5" fill={color}>10-15보</text>
-      <rect x="208" y="128" width="24" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
-      <text x="220" y="137" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">GS</text>
-      <path d="M220,128 Q220,108 200,108" fill="none" stroke={color} strokeWidth="2"/>
-      <text x="225" y="115" fontSize="8" fill={color} fontWeight="700">LW</text>
-      <line x1="200" y1="108" x2="70" y2="108" stroke={color} strokeWidth="2"/>
-      <text x="135" y="120" textAnchor="middle" fontSize="7.5" fill={color}>20-25보</text>
-      <circle cx="300" cy="260" r="7" fill={color}/>
-      <text x="300" y="278" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">START / END</text>
-      <ellipse cx="90" cy="260" rx="12" ry="8" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
-      <text x="90" y="263" textAnchor="middle" fontSize="7" fill={color}>♂견</text>
-      <ellipse cx="120" cy="254" rx="12" ry="8" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
-      <text x="120" y="257" textAnchor="middle" fontSize="7" fill={color}>♀견</text>
-      <rect x="290" y="230" width="100" height="16" rx="5" fill={color} opacity="0.12" stroke={color} strokeWidth="1"/>
-      <text x="340" y="241" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">줄 없음 (A·B단계)</text>
+    <svg viewBox="0 0 520 420" style={{ width:"100%", maxWidth:520, display:"block", margin:"0 auto" }}>
+      <rect width="520" height="420" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="260" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">줄없이 따라걷기 경로 (PDF 3.3.5 Off-leash)</text>
+
+      <ellipse cx="68" cy="68" rx="10" ry="7" fill="#222" opacity="0.7"/>
+      <circle cx="60" cy="60" r="5" fill="#222"/>
+      <text x="90" y="65" fontSize="9" fill="#333">female dog</text>
+      <ellipse cx="68" cy="98" rx="10" ry="7" fill="#222" opacity="0.5"/>
+      <circle cx="60" cy="90" r="5" fill="#222"/>
+      <text x="90" y="95" fontSize="9" fill="#333">male dog</text>
+      <line x1="56" y1="66" x2="56" y2="96" stroke="#c00" strokeWidth="1.5"/>
+      <text x="40" y="84" fontSize="9" fill="#c00" fontWeight="700">6 m</text>
+
+      <text x="350" y="38" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">approx. 40 normal</text>
+      <line x1="195" y1="42" x2="505" y2="42" stroke="#c00" strokeWidth="1.5" strokeDasharray="4,3"/>
+      <circle cx="195" cy="42" r="4" fill="#222"/>
+      <circle cx="505" cy="42" r="4" fill="#222"/>
+
+      <rect x="454" y="355" width="12" height="24" rx="3" fill="#222"/>
+      <circle cx="460" cy="350" r="7" fill="#222"/>
+      <rect x="470" y="358" width="12" height="20" rx="3" fill="#222" opacity="0.6"/>
+      <circle cx="476" cy="354" r="6" fill="#222" opacity="0.6"/>
+
+      <line x1="460" y1="350" x2="460" y2="120" stroke="#222" strokeWidth="2.5"/>
+      <polygon points="460,113 456,125 464,125" fill="#222"/>
+      <text x="472" y="240" fontSize="8.5" fill="#222" transform="rotate(90,472,240)">approx. 50 normal paces</text>
+
+      <path d="M460,120 Q460,95 435,95" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <text x="468" y="108" fontSize="9" fill="#222" fontWeight="700">KW</text>
+      <line x1="435" y1="95" x2="360" y2="95" stroke="#222" strokeWidth="2.5"/>
+      <text x="395" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 normal paces</text>
+      <line x1="360" y1="95" x2="285" y2="95" stroke="#222" strokeWidth="2" strokeDasharray="6,3"/>
+      <text x="320" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 fast paces</text>
+      <line x1="285" y1="95" x2="215" y2="95" stroke="#222" strokeWidth="2" strokeDasharray="3,3"/>
+      <text x="250" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 slow paces</text>
+      <line x1="215" y1="95" x2="195" y2="95" stroke="#222" strokeWidth="2.5"/>
+      <text x="165" y="88" textAnchor="middle" fontSize="8" fill="#222">10 – 15 normal paces</text>
+
+      <path d="M195,95 Q175,95 175,118" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <text x="148" y="112" fontSize="9" fill="#222" fontWeight="700">KW</text>
+      <line x1="175" y1="118" x2="175" y2="200" stroke="#222" strokeWidth="2.5"/>
+      <text x="140" y="162" fontSize="8" fill="#222" transform="rotate(90,140,162)">10 – 15 normal paces</text>
+      <circle cx="175" cy="200" r="4" fill="#222"/>
+      <line x1="175" y1="204" x2="175" y2="320" stroke="#222" strokeWidth="2.5"/>
+      <text x="140" y="265" fontSize="8" fill="#222" transform="rotate(90,140,265)">25 – 30 normal paces</text>
+      <text x="148" y="332" fontSize="9" fill="#222" fontWeight="700">RW</text>
+      <path d="M175,320 Q175,340 198,340" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <line x1="198" y1="340" x2="340" y2="340" stroke="#222" strokeWidth="2.5"/>
+      <text x="268" y="355" textAnchor="middle" fontSize="8" fill="#222">20 - 25 normal paces</text>
+      <text x="148" y="358" fontSize="9" fill="#222" fontWeight="700">LW</text>
+      <line x1="198" y1="356" x2="340" y2="356" stroke="#222" strokeWidth="2.5"/>
+      <text x="268" y="370" textAnchor="middle" fontSize="8" fill="#222">20 - 25 normal paces</text>
+      <text x="346" y="332" fontSize="9" fill="#222" fontWeight="700">RW</text>
+      <path d="M340,340 Q360,340 360,318" fill="none" stroke="#222" strokeWidth="2.5"/>
+      <line x1="360" y1="318" x2="360" y2="230" stroke="#222" strokeWidth="2.5"/>
+      <text x="375" y="278" fontSize="8" fill="#222" transform="rotate(90,375,278)">10 – 15 normal paces</text>
+      <circle cx="360" cy="230" r="4" fill="#222"/>
+      <line x1="360" y1="226" x2="360" y2="160" stroke="#222" strokeWidth="2.5"/>
+      <text x="375" y="196" fontSize="8" fill="#222" transform="rotate(90,375,196)">10 – 15 normal paces</text>
+
+      <rect x="348" y="42" width="12" height="24" rx="3" fill="#222"/>
+      <circle cx="354" cy="38" r="7" fill="#222"/>
+      <text x="380" y="55" fontSize="9" fill="#222" fontWeight="700">DH</text>
+
+      <rect x="330" y="390" width="150" height="18" rx="5" fill={color} opacity="0.12" stroke={color} strokeWidth="1"/>
+      <text x="405" y="402" textAnchor="middle" fontSize="8.5" fill={color} fontWeight="700">줄 없음 (A · B 단계)</text>
+
+      <text x="30" y="395" fontSize="9" fill="#333" fontWeight="700">RW = right turn</text>
+      <text x="30" y="408" fontSize="9" fill="#333" fontWeight="700">LW = left turn</text>
+      <text x="160" y="395" fontSize="9" fill="#333" fontWeight="700">KW = u-turn</text>
     </svg>
   );
 }
 
-// 이동중 앉아 및 부르기 — PDF p.17 Phase 1/2/3 도식
+// Image 12: 이동중 앉아 및 부르기 — Phase 1/2/3
 function SchemaMovingSit({ color }) {
   return (
-    <svg viewBox="0 0 340 200" style={{ width:"100%", maxWidth:340, display:"block", margin:"0 auto" }}>
-      <rect width="340" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="170" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">이동중 앉아 및 부르기 (PDF 3.3.6)</text>
+    <svg viewBox="0 0 420 340" style={{ width:"100%", maxWidth:420, display:"block", margin:"0 auto" }}>
+      <rect width="420" height="340" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="210" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">이동중 앉아 및 부르기 (PDF 3.3.6)</text>
+
       {/* Phase labels */}
-      <text x="50" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 1</text>
-      <text x="185" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 2</text>
-      <text x="295" y="38" textAnchor="middle" fontSize="9" fill={color} fontWeight="800">Phase 3</text>
-      {/* Phase 1: DH walking, dog sits */}
-      {/* DH at top walking up */}
-      <rect x="42" y="45" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="50" cy="40" r="6" fill={color} opacity="0.7"/>
-      <polygon points="50,67 46,80 54,80" fill={color} opacity="0.5"/>
-      {/* Dog sitting below */}
-      <ellipse cx="50" cy="120" rx="9" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <text x="50" y="123" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
-      {/* red arrow up (DH keeps walking) */}
-      <line x1="50" y1="95" x2="50" y2="68" stroke="#E53E3E" strokeWidth="2"/>
-      <polygon points="50,61 46,72 54,72" fill="#E53E3E"/>
-      {/* Distance label */}
-      <line x1="58" y1="68" x2="58" y2="120" stroke={color} strokeWidth="1" strokeDasharray="3,2"/>
-      <text x="70" y="97" fontSize="7.5" fill={color}>10-15보</text>
+      <text x="70" y="38" textAnchor="middle" fontSize="10" fill="#222" fontWeight="800">Phase 1</text>
+      <text x="210" y="38" textAnchor="middle" fontSize="10" fill="#222" fontWeight="800">Phase 2</text>
+      <text x="340" y="38" textAnchor="middle" fontSize="10" fill="#222" fontWeight="800">Phase 3</text>
+
+      {/* Phase 1 */}
+      {/* DH at top (walking up) */}
+      <rect x="62" y="50" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="69" cy="46" r="8" fill="#222"/>
+      {/* Red up arrow */}
+      <line x1="69" y1="76" x2="69" y2="200" stroke="#c00" strokeWidth="2.5"/>
+      <polygon points="69,76 64,88 74,88" fill="#c00"/>
+      {/* Dog sitting */}
+      <ellipse cx="55" cy="215" rx="12" ry="9" fill="#222" opacity="0.5"/>
+      <rect x="63" y="204" width="8" height="14" rx="2" fill="#222" opacity="0.7"/>
+      {/* 30 normal paces label */}
+      <text x="30" y="148" fontSize="9" fill="#222" fontWeight="700">30 normal paces</text>
+      <line x1="85" y1="78" x2="95" y2="78" stroke="#222" strokeWidth="1"/>
+      <line x1="85" y1="200" x2="95" y2="200" stroke="#222" strokeWidth="1"/>
+      {/* 10-15 paces */}
+      <text x="30" y="248" fontSize="9" fill="#222" fontWeight="700">10 - 15 normal paces</text>
       {/* Start position */}
-      <rect x="40" y="148" width="20" height="14" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="1"/>
-      <text x="50" y="158" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">시작</text>
-      <line x1="50" y1="127" x2="50" y2="148" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
-      <text x="68" y="138" fontSize="7.5" fill={color}>30보</text>
+      <rect x="55" y="256" width="16" height="26" rx="3" fill="#222" opacity="0.4"/>
+      <circle cx="63" cy="252" r="7" fill="#222" opacity="0.4"/>
+      <text x="63" y="298" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">Start Position</text>
+      {/* Flag */}
+      <line x1="48" y1="255" x2="48" y2="285" stroke="#222" strokeWidth="2"/>
+      <polygon points="48,255 60,260 48,266" fill="#222"/>
 
-      {/* Phase 2: DH stopped, turned, dog still sitting */}
-      <rect x="177" y="80" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="185" cy="76" r="6" fill={color} opacity="0.7"/>
-      {/* DH facing dog (turned) */}
-      <polygon points="185,102 181,114 189,114" fill={color} opacity="0.4"/>
-      <ellipse cx="185" cy="130" rx="9" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <text x="185" y="133" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
-      {/* recall arrow */}
-      <path d="M185,121 Q185,110 185,103" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="4,2"/>
-      <text x="200" y="115" fontSize="7.5" fill="#E53E3E">와!</text>
+      {/* Phase 2 */}
+      {/* DH + dog at front sit */}
+      <rect x="196" y="120" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="203" cy="116" r="8" fill="#222"/>
+      {/* Dog in front sit */}
+      <ellipse cx="190" cy="150" rx="11" ry="8" fill="#222" opacity="0.6"/>
+      <rect x="198" y="140" width="7" height="12" rx="2" fill="#222" opacity="0.7"/>
+      {/* Black up arrow */}
+      <line x1="203" y1="146" x2="203" y2="260" stroke="#222" strokeWidth="2.5"/>
+      <polygon points="203,146 198,158 208,158" fill="#222"/>
 
-      {/* Phase 3: dog in front sit */}
-      <rect x="286" y="80" width="16" height="22" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="294" cy="76" r="6" fill={color} opacity="0.7"/>
-      <ellipse cx="294" cy="108" rx="9" ry="7" fill={color} opacity="0.6" stroke={color} strokeWidth="1.2"/>
-      <text x="294" y="111" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">전면</text>
-      <text x="294" y="120" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">앉아</text>
+      {/* Phase 3 */}
+      {/* DH + dog GS */}
+      <rect x="328" y="120" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="335" cy="116" r="8" fill="#222"/>
+      <ellipse cx="350" cy="140" rx="10" ry="7" fill="#222" opacity="0.6"/>
+      <rect x="354" y="130" width="7" height="12" rx="2" fill="#222" opacity="0.7"/>
 
-      {/* Bottom note */}
-      <rect x="10" y="170" width="320" height="22" rx="4" fill={color} opacity="0.08"/>
-      <text x="170" y="180" textAnchor="middle" fontSize="7.5" fill="#555">DH는 멈추지 않고 계속 이동 → 30보 후 정지·반전 → 심사위원 지시로 '와!'</text>
-      <text x="170" y="189" textAnchor="middle" fontSize="7.5" fill="#C0392B">앉아 후 엎드려/서 자세 → 5점 감점</text>
+      {/* Notes */}
+      <rect x="10" y="305" width="400" height="28" rx="4" fill="#f5f5f5"/>
+      <text x="210" y="316" textAnchor="middle" fontSize="8.5" fill="#333">DH 멈추지 않고 이동 → 30보 후 정지·반전 → '와!' 신호</text>
+      <text x="210" y="327" textAnchor="middle" fontSize="8" fill="#c00">앉아 후 엎드려/서 자세 → 5점 감점</text>
     </svg>
   );
 }
 
-// 원격통제 — PDF p.18 Phase 1/2/3/4 도식
+// Image 11: 원격통제 — Phase 1/2/3/4 (빨간선, B표시)
 function SchemaRemoteControl({ color }) {
   return (
-    <svg viewBox="0 0 360 220" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격통제 (PDF 3.3.7 Distance Control)</text>
+    <svg viewBox="0 0 420 420" style={{ width:"100%", maxWidth:420, display:"block", margin:"0 auto" }}>
+      <rect width="420" height="420" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="210" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격통제 (PDF 3.3.7 Distance Control)</text>
+
       {/* Phase labels */}
       {["Phase 1","Phase 2","Phase 3","Phase 4"].map((p,i)=>(
-        <text key={i} x={45+i*85} y="35" textAnchor="middle" fontSize="8.5" fill={color} fontWeight="800">{p}</text>
+        <text key={i} x={55+i*100} y="38" textAnchor="middle" fontSize="10" fill="#222" fontWeight="800">{p}</text>
       ))}
-      {/* Phase 1: DH walking up, dog at dot (sits) */}
-      <circle cx="45" cy="55" r="5" fill={color}/>
-      {/* Red line (sit position) */}
-      <line x1="45" y1="60" x2="45" y2="140" stroke="#E53E3E" strokeWidth="2.5"/>
-      <polygon points="45,53 41,63 49,63" fill="#E53E3E"/>
-      {/* Dog at bottom of red line */}
-      <ellipse cx="45" cy="148" rx="8" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <text x="45" y="151" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">앉아</text>
-      {/* 10-15 steps label */}
-      <text x="22" y="195" textAnchor="middle" fontSize="7" fill={color}>10-15보</text>
-      <line x1="35" y1="148" x2="35" y2="185" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <rect x="30" y="185" width="30" height="14" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1"/>
-      <text x="45" y="195" textAnchor="middle" fontSize="7" fill={color} fontWeight="700">시작</text>
-      {/* 40보 label */}
-      <line x1="55" y1="60" x2="55" y2="148" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <text x="68" y="107" fontSize="7" fill={color}>40보</text>
 
-      {/* Phase 2: DH stopped, turned, dog approaching */}
-      <rect x="120" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="126" cy="51" r="5" fill={color} opacity="0.7"/>
-      {/* dotted line (dog running) */}
-      <line x1="126" y1="73" x2="126" y2="148" stroke={color} strokeWidth="1.5" strokeDasharray="5,3"/>
-      <polygon points="126,148 122,138 130,138" fill={color}/>
-      {/* 3 dots (start positions) */}
-      {[45,126,185].map((x,i)=><circle key={i} cx={x} cy={170} r="4" fill={color}/>)}
+      {/* Phase 1 — DH at top, red line going up */}
+      <rect x="47" y="50" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="54" cy="46" r="8" fill="#222"/>
+      {/* Red arrow up */}
+      <line x1="54" y1="76" x2="54" y2="230" stroke="#c00" strokeWidth="3"/>
+      <polygon points="54,76 49,88 59,88" fill="#c00"/>
+      {/* 40 normal paces label */}
+      <text x="20" y="160" fontSize="8.5" fill="#222" transform="rotate(90,20,160)">40 Normalschritte</text>
+      {/* Dog at bottom of red line (sitting) */}
+      <ellipse cx="40" cy="242" rx="11" ry="8" fill="#222" opacity="0.5"/>
+      <rect x="48" y="232" width="8" height="13" rx="2" fill="#222" opacity="0.7"/>
+      {/* Start dot */}
+      <circle cx="54" cy="260" r="6" fill="#222"/>
+      {/* 10-15 label */}
+      <text x="20" y="310" fontSize="8.5" fill="#222" transform="rotate(90,20,310)">10 - 15 Normalschritte</text>
+      {/* DH at very bottom */}
+      <rect x="47" y="340" width="14" height="26" rx="3" fill="#222" opacity="0.6"/>
+      <circle cx="54" cy="336" r="8" fill="#222" opacity="0.6"/>
+      {/* Dog next to DH */}
+      <ellipse cx="70" cy="352" rx="10" ry="7" fill="#222" opacity="0.4"/>
 
-      {/* Phase 3: B label (midpoint down) */}
-      <rect x="162" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="168" cy="51" r="5" fill={color} opacity="0.7"/>
-      <text x="200" y="112" fontSize="9" fill={color} fontWeight="900">B</text>
-      {/* dog in down */}
-      <ellipse cx="168" cy="118" rx="11" ry="7" fill={color} opacity="0.25" stroke={color} strokeWidth="1.2"/>
-      <text x="168" y="121" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">엎드려</text>
-      <line x1="168" y1="73" x2="168" y2="111" stroke={color} strokeWidth="1.5" strokeDasharray="5,3"/>
-      <polygon points="168,111 164,101 172,101" fill={color}/>
+      {/* Phase 2 — DH stopped, turned */}
+      <rect x="147" y="50" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="154" cy="46" r="8" fill="#222"/>
+      {/* dotted line down */}
+      <line x1="154" y1="76" x2="154" y2="260" stroke="#222" strokeWidth="2" strokeDasharray="6,4"/>
+      {/* dot */}
+      <circle cx="154" cy="260" r="6" fill="#222"/>
 
-      {/* Phase 4: dog in front sit next to DH */}
-      <rect x="280" y="55" width="12" height="18" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="286" cy="51" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="295" cy="75" rx="8" ry="6" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
-      <text x="295" y="78" textAnchor="middle" fontSize="6" fill="white" fontWeight="700">전면앉아</text>
+      {/* Phase 3 — DH + dog mid-recall with B label */}
+      <rect x="247" y="50" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="254" cy="46" r="8" fill="#222"/>
+      {/* Dog in down position mid-path */}
+      <ellipse cx="238" cy="175" rx="13" ry="9" fill="#222" opacity="0.6"/>
+      {/* Dog sitting behind */}
+      <ellipse cx="265" cy="182" rx="10" ry="7" fill="#222" opacity="0.4"/>
+      <rect x="270" y="172" width="7" height="12" rx="2" fill="#222" opacity="0.5"/>
+      {/* B label */}
+      <text x="285" y="178" fontSize="14" fill="#222" fontWeight="900">B</text>
+      {/* Black up arrow */}
+      <line x1="254" y1="76" x2="254" y2="260" stroke="#222" strokeWidth="2.5"/>
+      <polygon points="254,76 249,88 259,88" fill="#222"/>
+      {/* dot */}
+      <circle cx="254" cy="260" r="6" fill="#222"/>
+
+      {/* Phase 4 — DH + dog at heel */}
+      <rect x="347" y="50" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="354" cy="46" r="8" fill="#222"/>
+      <ellipse cx="370" cy="70" rx="10" ry="7" fill="#222" opacity="0.5"/>
+      <rect x="372" y="60" width="7" height="12" rx="2" fill="#222" opacity="0.6"/>
 
       {/* Note */}
-      <rect x="10" y="186" width="340" height="26" rx="4" fill={color} opacity="0.07"/>
-      <text x="180" y="197" textAnchor="middle" fontSize="7.5" fill="#555">A단계: 앉아→와→엎드려→와 / B단계: 앉아→와→엎드려→서→와</text>
-      <text x="180" y="207" textAnchor="middle" fontSize="7.5" fill="#C0392B">10보 이상 초과해서 자세 취하면 → 해당 부분 최대 만족함(B)</text>
+      <rect x="10" y="385" width="400" height="28" rx="4" fill="#f5f5f5"/>
+      <text x="210" y="396" textAnchor="middle" fontSize="8.5" fill="#333">A단계: 앉아→와→엎드려→와 / B단계: 앉아→와→엎드려→서→와</text>
+      <text x="210" y="407" textAnchor="middle" fontSize="8" fill="#c00">10보 이상 초과해서 자세 취하면 → 최대 만족함(B)</text>
     </svg>
   );
 }
 
-// 원격조정 V단계 — PDF p.22 V단계 도식
+// Image 8: 원격조정 V단계 — 2개 테이블 (40m, 20m, 8.5m)
 function SchemaSendAwayV({ color }) {
   return (
-    <svg viewBox="0 0 300 220" style={{ width:"100%", maxWidth:300, display:"block", margin:"0 auto" }}>
-      <rect width="300" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="150" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격조정 V단계 — 2개 (PDF 3.3.11 Level V)</text>
-      {/* DH at bottom */}
-      <rect x="135" y="175" width="30" height="20" rx="4" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2"/>
-      <text x="150" y="188" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">DH·견</text>
-      {/* Start dot */}
-      <circle cx="150" cy="172" r="4" fill={color}/>
-      {/* 8.5m line to marker */}
-      <line x1="150" y1="172" x2="150" y2="145" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
-      <text x="162" y="160" fontSize="7.5" fill={color}>8.5m</text>
-      {/* Middle marker */}
-      <circle cx="150" cy="140" r="5" fill="#FFB300" stroke="#E65100" strokeWidth="1.5"/>
-      <text x="168" y="143" fontSize="7.5" fill="#E65100" fontWeight="700">중앙마커</text>
-      {/* 20m lines to tables */}
-      <line x1="150" y1="135" x2="80" y2="72" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
-      <line x1="150" y1="135" x2="220" y2="72" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
-      <text x="100" y="106" fontSize="7" fill={color}>20m</text>
-      <text x="195" y="106" fontSize="7" fill={color}>20m</text>
+    <svg viewBox="0 0 500 320" style={{ width:"100%", maxWidth:500, display:"block", margin:"0 auto" }}>
+      <rect width="500" height="320" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="250" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격조정 V단계 — 2개 (PDF 3.3.11 Level V)</text>
+
+      {/* DH at bottom center */}
+      <rect x="235" y="258" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="242" cy="254" r="8" fill="#222"/>
+      {/* Dog next to DH */}
+      <ellipse cx="220" cy="268" rx="10" ry="7" fill="#222" opacity="0.5"/>
+      {/* Green start line */}
+      <line x1="210" y1="275" x2="270" y2="275" stroke="#4a7c4e" strokeWidth="3"/>
+
+      {/* 8.5m up to start dot */}
+      <circle cx="242" cy="240" r="5" fill="#222"/>
+      <line x1="242" y1="254" x2="242" y2="242" stroke="#222" strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="255" y="250" fontSize="8" fill="#c00" fontWeight="700">8,5 m</text>
+
+      {/* 20m up to cone/marker */}
+      <line x1="242" y1="240" x2="242" y2="155" stroke="#222" strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="255" y="200" fontSize="8" fill="#c00" fontWeight="700">20 m</text>
+      {/* Cone at center */}
+      <polygon points="242,145 234,168 250,168" fill="#c00" opacity="0.8"/>
+      <rect x="234" y="168" width="16" height="5" rx="2" fill="#c00" opacity="0.6"/>
+
+      {/* Table 1 — left */}
+      <rect x="75" y="68" width="90" height="40" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <text x="120" y="92" textAnchor="middle" fontSize="11" fill="#222" fontWeight="800">T1</text>
+      {/* Backpack icon left of T1 */}
+      <rect x="162" y="78" width="18" height="22" rx="4" fill="#4a7c4e" opacity="0.7"/>
+      <circle cx="171" cy="76" r="5" fill="#4a7c4e" opacity="0.7"/>
+
+      {/* Table 2 — right */}
+      <rect x="330" y="68" width="90" height="40" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <text x="375" y="92" textAnchor="middle" fontSize="11" fill="#222" fontWeight="800">T2</text>
+      {/* Backpack icon right of T2 */}
+      <rect x="316" y="78" width="18" height="22" rx="4" fill="#4a7c4e" opacity="0.7"/>
+      <circle cx="325" cy="76" r="5" fill="#4a7c4e" opacity="0.7"/>
+
       {/* 40m label between tables */}
-      <line x1="80" y1="64" x2="220" y2="64" stroke={color} strokeWidth="1" strokeDasharray="3,2"/>
-      <text x="150" y="60" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 40m →</text>
-      {/* Table 1 */}
-      <rect x="54" y="65" width="52" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="80" y="83" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T1</text>
-      {/* Table 2 */}
-      <rect x="194" y="65" width="52" height="28" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="220" y="83" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T2</text>
-      {/* Dog path: center → T1 → T2 → recall */}
-      <path d="M148,135 Q90,110 82,93" fill="none" stroke={color} strokeWidth="2"/>
-      <polygon points="82,93 80,103 88,100" fill={color}/>
-      <path d="M106,78 Q163,72 194,78" fill="none" stroke={color} strokeWidth="2"/>
-      <polygon points="194,78 184,76 186,84" fill={color}/>
-      {/* Recall arrow */}
-      <path d="M220,93 Q195,140 155,170" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3"/>
-      <polygon points="155,170 158,160 148,163" fill="#E53E3E"/>
-      <text x="200" y="145" fontSize="7.5" fill="#E53E3E" fontWeight="700">와!</text>
-      {/* Notes */}
-      <rect x="10" y="195" width="280" height="18" rx="4" fill={color} opacity="0.07"/>
-      <text x="150" y="207" textAnchor="middle" fontSize="7.5" fill="#555">각 T에서 최소 3초 대기 · 중앙마커 미경유 → 부족함(M)</text>
+      <line x1="80" y1="52" x2="418" y2="52" stroke="#222" strokeWidth="1.5"/>
+      <line x1="80" y1="48" x2="80" y2="56" stroke="#222" strokeWidth="1.5"/>
+      <line x1="418" y1="48" x2="418" y2="56" stroke="#222" strokeWidth="1.5"/>
+      <text x="249" y="48" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">40 m</text>
+
+      {/* Corner dots */}
+      <circle cx="80" cy="52" r="5" fill="#222"/>
+      <circle cx="418" cy="52" r="5" fill="#222"/>
+      <circle cx="80" cy="108" r="5" fill="#222"/>
+      <circle cx="418" cy="108" r="5" fill="#222"/>
+
+      {/* Lines from tables to cone */}
+      <line x1="165" y1="88" x2="238" y2="150" stroke="#222" strokeWidth="1.5"/>
+      <line x1="330" y1="88" x2="246" y2="150" stroke="#222" strokeWidth="1.5"/>
+
+      {/* 23m label */}
+      <text x="310" y="130" fontSize="9" fill="#c00" fontWeight="700">23 m</text>
+
+      {/* Note */}
+      <rect x="10" y="292" width="480" height="22" rx="4" fill="#f5f5f5"/>
+      <text x="250" y="306" textAnchor="middle" fontSize="8.5" fill="#333">중앙마커(20m) → T1 → T2 → '와' · 각 최소 3초 대기 · 중앙마커 미경유 → 부족함(M)</text>
     </svg>
   );
 }
 
-// 원격조정 A·B단계 — PDF p.23 A·B단계 도식
+// Image 7: 원격조정 A·B단계 — 3개 테이블 (R=23m arc, 40m, 34.64m, 8.45m)
 function SchemaSendAwayAB({ color }) {
   return (
-    <svg viewBox="0 0 300 240" style={{ width:"100%", maxWidth:300, display:"block", margin:"0 auto" }}>
-      <rect width="300" height="240" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="150" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">원격조정 A·B단계 — 3개 (PDF 3.3.11 Level A·B)</text>
+    <svg viewBox="0 0 520 380" style={{ width:"100%", maxWidth:520, display:"block", margin:"0 auto" }}>
+      <rect width="520" height="380" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="260" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">원격조정 A·B단계 — 3개 (PDF 3.3.11 Level A·B)</text>
+
       {/* DH at bottom */}
-      <rect x="130" y="195" width="40" height="20" rx="4" fill={color} opacity="0.2" stroke={color} strokeWidth="1.2"/>
-      <text x="150" y="208" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">DH·견</text>
-      <circle cx="150" cy="192" r="4" fill={color}/>
-      {/* 8.45m to center */}
-      <line x1="150" y1="192" x2="150" y2="162" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
-      <text x="162" y="180" fontSize="7" fill={color}>8.45m</text>
-      {/* Center marker */}
-      <polygon points="150,155 145,165 155,165" fill="#E53E3E"/>
-      <circle cx="150" cy="158" r="6" fill="#FFB300" stroke="#E65100" strokeWidth="1.5"/>
-      <text x="150" y="162" textAnchor="middle" fontSize="7" fill="#E65100" fontWeight="700">중앙</text>
-      {/* Dashed arc (R=23m) */}
-      <ellipse cx="150" cy="100" rx="100" ry="80" fill="none" stroke={color} strokeWidth="1" strokeDasharray="5,3" opacity="0.4"/>
-      {/* 3 Tables at arc positions */}
-      {/* T1 top-left */}
-      <rect x="38" y="40" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="60" y="57" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T1</text>
-      {/* T2 top-right */}
-      <rect x="218" y="40" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="240" y="57" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T2</text>
-      {/* T3 right */}
-      <rect x="240" y="118" width="44" height="26" rx="5" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="262" y="135" textAnchor="middle" fontSize="10" fill={color} fontWeight="800">T3</text>
-      {/* 40m labels */}
-      <line x1="60" y1="38" x2="240" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <text x="150" y="34" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 40m →</text>
-      {/* Dog path center→T1→T2→T3→recall */}
-      <path d="M147,152 Q100,120 62,66" fill="none" stroke={color} strokeWidth="2"/>
-      <polygon points="62,66 58,76 66,74" fill={color}/>
-      <path d="M82,46 Q161,36 218,46" fill="none" stroke={color} strokeWidth="2"/>
-      <polygon points="218,46 208,44 210,52" fill={color}/>
-      <path d="M258,66 Q268,100 262,118" fill="none" stroke={color} strokeWidth="2"/>
-      <polygon points="262,118 258,108 266,108" fill={color}/>
-      {/* Recall */}
-      <path d="M260,144 Q220,170 155,190" fill="none" stroke="#E53E3E" strokeWidth="2" strokeDasharray="5,3"/>
-      <polygon points="155,190 158,180 148,183" fill="#E53E3E"/>
-      <text x="215" y="172" fontSize="7.5" fill="#E53E3E" fontWeight="700">와!</text>
+      <rect x="248" y="305" width="14" height="26" rx="3" fill="#222"/>
+      <circle cx="255" cy="301" r="8" fill="#222"/>
+      <line x1="222" y1="320" x2="288" y2="320" stroke="#4a7c4e" strokeWidth="3"/>
+
+      {/* 8.45m */}
+      <circle cx="255" cy="288" r="5" fill="#222"/>
+      <text x="270" y="298" fontSize="8" fill="#c00" fontWeight="700">8,45 m</text>
+      {/* 20m to cone */}
+      <line x1="255" y1="288" x2="255" y2="210" stroke="#222" strokeWidth="1.5" strokeDasharray="3,2"/>
+      <text x="268" y="252" fontSize="8" fill="#c00" fontWeight="700">20 m</text>
+      {/* Cone center */}
+      <polygon points="255,200 246,222 264,222" fill="#c00" opacity="0.85"/>
+      <rect x="246" y="222" width="18" height="6" rx="2" fill="#c00" opacity="0.6"/>
+
+      {/* Dashed arc R=23m */}
+      <ellipse cx="255" cy="145" rx="130" ry="110" fill="none" stroke="#222" strokeWidth="1.5" strokeDasharray="6,4"/>
+      <text x="310" y="160" fontSize="9" fill="#c00" fontWeight="700">R = 23 m</text>
+
+      {/* Table top (T1) */}
+      <rect x="195" y="28" width="90" height="40" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <text x="240" y="52" textAnchor="middle" fontSize="11" fill="#222" fontWeight="800">T1</text>
+      <rect x="228" y="20" width="18" height="22" rx="4" fill="#4a7c4e" opacity="0.7"/>
+      <circle cx="237" cy="18" r="5" fill="#4a7c4e" opacity="0.7"/>
+
+      {/* Table left (T2) */}
+      <rect x="52" y="138" width="90" height="40" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <text x="97" y="162" textAnchor="middle" fontSize="11" fill="#222" fontWeight="800">T2</text>
+      <rect x="138" y="148" width="18" height="22" rx="4" fill="#4a7c4e" opacity="0.7"/>
+      <circle cx="147" cy="146" r="5" fill="#4a7c4e" opacity="0.7"/>
+
+      {/* Table right (T3) */}
+      <rect x="378" y="138" width="90" height="40" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <text x="423" y="162" textAnchor="middle" fontSize="11" fill="#222" fontWeight="800">T3</text>
+      <rect x="362" y="148" width="18" height="22" rx="4" fill="#4a7c4e" opacity="0.7"/>
+      <circle cx="371" cy="146" r="5" fill="#4a7c4e" opacity="0.7"/>
+
+      {/* Corner dots */}
+      <circle cx="57" cy="30" r="5" fill="#222"/>
+      <circle cx="457" cy="30" r="5" fill="#222"/>
+      <circle cx="57" cy="178" r="5" fill="#222"/>
+      <circle cx="457" cy="178" r="5" fill="#222"/>
+
+      {/* 40m top */}
+      <line x1="57" y1="22" x2="457" y2="22" stroke="#222" strokeWidth="1.5"/>
+      <line x1="57" y1="18" x2="57" y2="26" stroke="#222" strokeWidth="1.5"/>
+      <line x1="457" y1="18" x2="457" y2="26" stroke="#222" strokeWidth="1.5"/>
+      <text x="257" y="18" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">40 m</text>
+
+      {/* 34.64m left side */}
+      <line x1="30" y1="30" x2="30" y2="178" stroke="#222" strokeWidth="1.5"/>
+      <line x1="26" y1="30" x2="34" y2="30" stroke="#222" strokeWidth="1.5"/>
+      <line x1="26" y1="178" x2="34" y2="178" stroke="#222" strokeWidth="1.5"/>
+      <text x="18" y="108" fontSize="8" fill="#c00" fontWeight="700" transform="rotate(90,18,108)">34,64 m</text>
+
+      {/* Lines from tables to cone */}
+      <line x1="240" y1="68" x2="253" y2="200" stroke="#222" strokeWidth="1.2"/>
+      <line x1="142" y1="158" x2="250" y2="202" stroke="#222" strokeWidth="1.2"/>
+      <line x1="378" y1="158" x2="258" y2="202" stroke="#222" strokeWidth="1.2"/>
+
+      {/* 40m diagonal labels */}
+      <text x="152" y="100" fontSize="9" fill="#c00" fontWeight="700">40 m</text>
+      <text x="320" y="100" fontSize="9" fill="#c00" fontWeight="700">40 m</text>
+
       {/* Note */}
-      <rect x="10" y="215" width="280" height="18" rx="4" fill={color} opacity="0.07"/>
-      <text x="150" y="227" textAnchor="middle" fontSize="7.5" fill="#555">추첨 순서로 T1→T2→T3 · 각 3초 대기 · B단계는 심사위원이 순서 결정</text>
+      <rect x="10" y="342" width="500" height="32" rx="4" fill="#f5f5f5"/>
+      <text x="260" y="355" textAnchor="middle" fontSize="8.5" fill="#333">중앙마커(20m) → 추첨 순서로 T1→T2→T3 · 각 3초 대기</text>
+      <text x="260" y="367" textAnchor="middle" fontSize="8.5" fill="#c00">중앙마커 미경유 또는 순서 불이행 → 부족함(M)</text>
     </svg>
   );
 }
 
-// 터널 — PDF p.25-26 단면 도식 (하드터널+소프트튜브)
+// Image 9: 들고 건네주기 — 10 Schritte × 2
+function SchemaCarryHandover({ color }) {
+  return (
+    <svg viewBox="0 0 500 180" style={{ width:"100%", maxWidth:500, display:"block", margin:"0 auto" }}>
+      <rect width="500" height="180" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="250" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">들고 건네주기 (PDF 3.3.9 Carry and Hand-over)</text>
+
+      {/* 10 Schritte labels */}
+      <line x1="60" y1="38" x2="200" y2="38" stroke="#c00" strokeWidth="1.5"/>
+      <text x="130" y="33" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">10 Schritte</text>
+      <line x1="60" y1="35" x2="60" y2="41" stroke="#c00" strokeWidth="1.5"/>
+      <line x1="200" y1="35" x2="200" y2="41" stroke="#c00" strokeWidth="1.5"/>
+
+      <line x1="200" y1="38" x2="380" y2="38" stroke="#c00" strokeWidth="1.5"/>
+      <text x="290" y="33" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">10 Schritte</text>
+      <line x1="380" y1="35" x2="380" y2="41" stroke="#c00" strokeWidth="1.5"/>
+
+      {/* top alignment dots */}
+      <circle cx="60" cy="42" r="4" fill="#222"/>
+      <circle cx="200" cy="42" r="4" fill="#222"/>
+      <circle cx="380" cy="42" r="4" fill="#222"/>
+
+      {/* Scene 1: DH + dog on table, left side */}
+      {/* Table */}
+      <rect x="62" y="95" width="35" height="18" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      {/* Dog on table */}
+      <ellipse cx="85" cy="90" rx="11" ry="7" fill="#888"/>
+      {/* DH */}
+      <rect x="40" y="80" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="46" cy="76" r="6" fill="#222"/>
+      {/* Arrow right (DH carrying dog) */}
+      <line x1="100" y1="95" x2="185" y2="95" stroke="#c00" strokeWidth="2.5"/>
+      <polygon points="185,91 195,95 185,99" fill="#c00"/>
+
+      {/* Scene 2: HP receiving dog, center */}
+      {/* HP figure */}
+      <rect x="188" y="72" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="194" cy="68" r="6" fill="#222"/>
+      {/* DH figure */}
+      <rect x="202" y="72" width="12" height="22" rx="3" fill="#222" opacity="0.6"/>
+      <circle cx="208" cy="68" r="6" fill="#222" opacity="0.6"/>
+      {/* Dog being handed over */}
+      <ellipse cx="200" cy="90" rx="10" ry="7" fill="#888"/>
+      {/* Arrow right */}
+      <line x1="220" y1="95" x2="365" y2="95" stroke="#c00" strokeWidth="2" strokeDasharray="6,4"/>
+      <polygon points="365,91 375,95 365,99" fill="#c00"/>
+
+      {/* Scene 3: HP + dog walking right with DH */}
+      <rect x="368" y="72" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="374" cy="68" r="6" fill="#222"/>
+      <rect x="382" y="75" width="12" height="20" rx="3" fill="#222" opacity="0.5"/>
+      <circle cx="388" cy="71" r="6" fill="#222" opacity="0.5"/>
+      {/* Dog at feet */}
+      <ellipse cx="400" cy="92" rx="10" ry="7" fill="#888"/>
+
+      {/* Note */}
+      <rect x="10" y="145" width="480" height="28" rx="4" fill="#f5f5f5"/>
+      <text x="250" y="157" textAnchor="middle" fontSize="8.5" fill="#333">V단계: HP가 견 머리를 DH 방향으로 향하게 하고 10보 이동 후 내려놓음 → GS</text>
+      <text x="250" y="168" textAnchor="middle" fontSize="8.5" fill="#333">A·B단계: 내려놓은 후 '와' 신호 → 전면 앉아 → GS</text>
+    </svg>
+  );
+}
+
+// Image 10: 자세변경 — 테이블 위 Sit/Down/Stand (Tisch 1x1m H=60cm)
+function SchemaPositionChange({ color }) {
+  return (
+    <svg viewBox="0 0 440 360" style={{ width:"100%", maxWidth:440, display:"block", margin:"0 auto" }}>
+      <rect width="440" height="360" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="220" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">자세변경 (PDF 3.3.8 Change of Position)</text>
+
+      {/* 10 steps label */}
+      <line x1="30" y1="40" x2="200" y2="40" stroke="#c00" strokeWidth="1.5"/>
+      <text x="115" y="35" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">10 Schritte</text>
+      <line x1="30" y1="37" x2="30" y2="43" stroke="#c00" strokeWidth="1.5"/>
+      <line x1="200" y1="37" x2="200" y2="43" stroke="#c00" strokeWidth="1.5"/>
+
+      {/* Table spec */}
+      <rect x="280" y="28" width="140" height="32" rx="4" fill="#f5f5f5" stroke="#ddd" strokeWidth="1"/>
+      <text x="350" y="40" textAnchor="middle" fontSize="8.5" fill="#222" fontWeight="700">Tisch</text>
+      <text x="350" y="51" textAnchor="middle" fontSize="8" fill="#222">1 x 1 m · H = 60 cm</text>
+
+      {/* Row 1: DH sends dog to table — dog sits */}
+      <rect x="15" y="68" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="21" cy="64" r="6" fill="#222"/>
+      <ellipse cx="37" cy="80" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      {/* Flag */}
+      <line x1="10" y1="68" x2="10" y2="90" stroke="#222" strokeWidth="2"/>
+      <polygon points="10,68 22,73 10,78" fill="#222"/>
+      {/* Arrow */}
+      <line x1="46" y1="79" x2="170" y2="79" stroke="#222" strokeWidth="1.5"/>
+      <polygon points="170,75 180,79 170,83" fill="#222"/>
+      {/* Table */}
+      <rect x="182" y="70" width="100" height="18" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="182" y="88" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      <rect x="270" y="88" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      {/* Dog sitting on table */}
+      <rect x="256" y="62" width="7" height="12" rx="2" fill="#888"/>
+      <ellipse cx="252" cy="70" rx="9" ry="6" fill="#888"/>
+      {/* Sit marker */}
+      <polygon points="240,90 244,82 248,90" fill="#333"/>
+      {/* Position markers */}
+      <polygon points="265,90 269,82 273,90" fill="#333" opacity="0.5"/>
+      <rect x="276" y="82" width="8" height="8" fill="#333" opacity="0.3"/>
+
+      {/* Row 2: dog lies down */}
+      <rect x="15" y="138" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="21" cy="134" r="6" fill="#222"/>
+      <ellipse cx="37" cy="150" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="10" y1="138" x2="10" y2="160" stroke="#222" strokeWidth="2"/>
+      <polygon points="10,138 22,143 10,148" fill="#222"/>
+      <rect x="182" y="140" width="100" height="18" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="182" y="158" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      <rect x="270" y="158" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      {/* Dog lying */}
+      <ellipse cx="248" cy="138" rx="14" ry="7" fill="#888"/>
+      <polygon points="240,160 244,152 248,160" fill="#333" opacity="0.5"/>
+      <rect x="256" y="152" width="8" height="8" fill="#333"/>
+      <rect x="276" y="152" width="8" height="8" fill="#333" opacity="0.3"/>
+      <text x="260" y="158" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">●</text>
+
+      {/* Row 3: dog stands */}
+      <rect x="15" y="208" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="21" cy="204" r="6" fill="#222"/>
+      <ellipse cx="37" cy="220" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="10" y1="208" x2="10" y2="230" stroke="#222" strokeWidth="2"/>
+      <polygon points="10,208 22,213 10,218" fill="#222"/>
+      <rect x="182" y="210" width="100" height="18" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="182" y="228" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      <rect x="270" y="228" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      {/* Dog standing */}
+      <ellipse cx="255" cy="207" rx="13" ry="6" fill="#888"/>
+      <rect x="248" y="207" width="8" height="8" rx="1" fill="#888"/>
+      <polygon points="240,230 244,222 248,230" fill="#333" opacity="0.5"/>
+      <rect x="256" y="222" width="8" height="8" fill="#333" opacity="0.3"/>
+      <rect x="276" y="222" width="8" height="8" fill="#333"/>
+
+      {/* Row 4: dog back to DH */}
+      <rect x="15" y="278" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="21" cy="274" r="6" fill="#222"/>
+      <ellipse cx="37" cy="290" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="10" y1="278" x2="10" y2="300" stroke="#222" strokeWidth="2"/>
+      <polygon points="10,278 22,283 10,288" fill="#222"/>
+      <rect x="182" y="280" width="100" height="18" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="182" y="298" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      <rect x="270" y="298" width="12" height="22" rx="2" fill="#a07830" opacity="0.5"/>
+      {/* Dog running back */}
+      <ellipse cx="100" cy="286" rx="13" ry="7" fill="#888"/>
+      <polygon points="240,300 244,292 248,300" fill="#333" opacity="0.5"/>
+      <rect x="256" y="292" width="8" height="8" fill="#333" opacity="0.3"/>
+      <rect x="276" y="292" width="8" height="8" fill="#333"/>
+
+      {/* Legend */}
+      <polygon points="10,328 14,320 18,328" fill="#333"/>
+      <text x="24" y="328" fontSize="8.5" fill="#333">= Sitzposition (앉아)</text>
+      <rect x="10" y="336" width="8" height="8" fill="#333"/>
+      <text x="24" y="344" fontSize="8.5" fill="#333">= Platzposition (엎드려)</text>
+      <rect x="10" y="348" width="8" height="8" fill="#333" opacity="0.4"/>
+      <text x="24" y="356" fontSize="8.5" fill="#333">= Stehposition (서)</text>
+    </svg>
+  );
+}
+
+// Image 6: 터널 — 300cm+300cm, 3단계 진행
 function SchemaTunnel({ color }) {
   return (
-    <svg viewBox="0 0 360 180" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="180" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">터널통과 구성도 (PDF 3.3.13 Tunnel with tube)</text>
-      {/* DH figure left */}
-      <rect x="18" y="70" width="14" height="22" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="25" cy="66" r="6" fill={color} opacity="0.7"/>
-      {/* Hard tunnel */}
-      <text x="105" y="40" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 300cm →</text>
-      <line x1="40" y1="38" x2="170" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <rect x="40" y="58" width="130" height="50" rx="0" fill={color} opacity="0.12" stroke={color} strokeWidth="2"/>
-      <text x="105" y="78" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">하드터널</text>
-      <text x="105" y="91" textAnchor="middle" fontSize="8" fill={color}>D=50cm</text>
-      {/* Soft tube */}
-      <text x="255" y="40" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 300cm →</text>
-      <line x1="170" y1="38" x2="340" y2="38" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <rect x="170" y="58" width="170" height="50" rx="8" fill={color} opacity="0.07" stroke={color} strokeWidth="2" strokeDasharray="6,3"/>
-      <text x="255" y="78" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">소프트 튜브</text>
-      <text x="255" y="91" textAnchor="middle" fontSize="8" fill={color}>D=50cm (유연 소재)</text>
-      {/* Dog arrow through tunnel */}
-      <line x1="40" y1="83" x2="330" y2="83" stroke="#E53E3E" strokeWidth="2.5" strokeDasharray="8,4"/>
-      <polygon points="330,80 320,83 330,86" fill="#E53E3E"/>
-      <text x="185" y="130" textAnchor="middle" fontSize="8" fill="#E53E3E" fontWeight="700">→ 견 통과 방향 (좌→우)</text>
-      {/* Stay marker */}
-      <circle cx="338" cy="83" r="6" fill="#E53E3E" opacity="0.7"/>
-      <text x="338" y="86" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">멈춰</text>
-      {/* Execution note */}
-      <rect x="10" y="145" width="340" height="28" rx="4" fill={color} opacity="0.07"/>
-      <text x="180" y="156" textAnchor="middle" fontSize="7.5" fill="#555">기본자세 → '통과' 성부/시부 1회 → 터널 통과 → '멈춰' → 심사위원 지시 → 지도수 접근 → 기본자세</text>
-      <text x="180" y="167" textAnchor="middle" fontSize="7.5" fill="#C0392B">통과 후 '멈춰' 미이행 → 부족함(M) / 장애물 거부 → 0점</text>
+    <svg viewBox="0 0 480 320" style={{ width:"100%", maxWidth:480, display:"block", margin:"0 auto" }}>
+      <rect width="480" height="320" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="240" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">터널통과 (PDF 3.3.13 Tunnel with tube)</text>
+
+      {/* === Stage 1: top view with dimensions === */}
+      {/* 300cm + 300cm labels */}
+      <line x1="80" y1="38" x2="240" y2="38" stroke="#222" strokeWidth="1.5"/>
+      <text x="160" y="33" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">300 cm</text>
+      <line x1="80" y1="35" x2="80" y2="41" stroke="#222" strokeWidth="1.5"/>
+      <line x1="240" y1="35" x2="240" y2="41" stroke="#222" strokeWidth="1.5"/>
+      <line x1="240" y1="38" x2="430" y2="38" stroke="#222" strokeWidth="1.5"/>
+      <text x="335" y="33" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">300 cm</text>
+      <line x1="430" y1="35" x2="430" y2="41" stroke="#222" strokeWidth="1.5"/>
+
+      {/* Tunnel D label (red) */}
+      <text x="160" y="54" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">Tunnel D = 50 cm</text>
+      <text x="335" y="54" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">Schlauch D = 50 cm</text>
+
+      {/* DH + dog left */}
+      <rect x="28" y="62" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="58" r="6" fill="#222"/>
+      <ellipse cx="52" cy="74" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      {/* Flag */}
+      <line x1="20" y1="62" x2="20" y2="84" stroke="#222" strokeWidth="2"/>
+      <polygon points="20,62 32,67 20,72" fill="#222"/>
+
+      {/* Tunnel body (hard section) — blue hatching */}
+      <rect x="80" y="62" width="160" height="32" fill="#c8e0f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {Array.from({length:16}).map((_,i)=>(
+        <line key={i} x1={80+i*10} y1="62" x2={80+i*10} y2="94" stroke="#4a7c4e" strokeWidth="1" opacity="0.4"/>
+      ))}
+
+      {/* Soft tube (lighter, tapered) */}
+      <path d="M240,62 L430,68 L430,88 L240,94 Z" fill="#d4e8f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {Array.from({length:19}).map((_,i)=>(
+        <line key={i} x1={240+i*10} y1={62+(i*0.3)} x2={240+i*10} y2={94-(i*0.3)} stroke="#4a7c4e" strokeWidth="1" opacity="0.3"/>
+      ))}
+
+      {/* === Stage 2: dog exits, stays === */}
+      <rect x="28" y="140" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="136" r="6" fill="#222"/>
+      <ellipse cx="52" cy="152" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="20" y1="140" x2="20" y2="162" stroke="#222" strokeWidth="2"/>
+      <polygon points="20,140 32,145 20,150" fill="#222"/>
+      <rect x="80" y="138" width="160" height="32" fill="#c8e0f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {Array.from({length:16}).map((_,i)=>(<line key={i} x1={80+i*10} y1="138" x2={80+i*10} y2="170" stroke="#4a7c4e" strokeWidth="1" opacity="0.4"/>))}
+      <path d="M240,138 L430,144 L430,164 L240,170 Z" fill="#d4e8f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {/* Dog lying at exit */}
+      <ellipse cx="440" cy="156" rx="13" ry="7" fill="#888"/>
+      <text x="440" y="174" textAnchor="middle" fontSize="8" fill="#222" fontWeight="700">V (멈춰)</text>
+
+      {/* === Stage 3: DH walks to dog === */}
+      <rect x="28" y="220" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="216" r="6" fill="#222"/>
+      <ellipse cx="52" cy="232" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="20" y1="220" x2="20" y2="242" stroke="#222" strokeWidth="2"/>
+      <polygon points="20,220 32,225 20,230" fill="#222"/>
+      <rect x="80" y="218" width="160" height="32" fill="#c8e0f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {Array.from({length:16}).map((_,i)=>(<line key={i} x1={80+i*10} y1="218" x2={80+i*10} y2="250" stroke="#4a7c4e" strokeWidth="1" opacity="0.4"/>))}
+      <path d="M240,218 L430,224 L430,244 L240,250 Z" fill="#d4e8f4" stroke="#4a7c4e" strokeWidth="2"/>
+      {/* DH walking to right */}
+      <rect x="415" y="218" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="421" cy="214" r="6" fill="#222"/>
+      {/* Dog at heel */}
+      <ellipse cx="440" cy="238" rx="9" ry="6" fill="#888"/>
+
+      {/* Note */}
+      <rect x="10" y="270" width="460" height="40" rx="4" fill="#f5f5f5"/>
+      <text x="240" y="282" textAnchor="middle" fontSize="8.5" fill="#333">기본자세 → '통과' 성부/시부 1회 → 터널 통과 → '멈춰' → 심사위원 지시 → DH 접근 → 기본자세</text>
+      <text x="240" y="294" textAnchor="middle" fontSize="8" fill="#333">하드터널: 직경 50cm · 길이 3m / 소프트 튜브: 직경 50cm · 길이 3m</text>
+      <text x="240" y="305" textAnchor="middle" fontSize="8" fill="#c00">통과 후 '멈춰' 미이행 → 부족함(M) / 장애물 거부 → 0점</text>
     </svg>
   );
 }
 
-// 고정 나무다리 — PDF p.26 도식 (3단계 진행)
+// Image 5: 고정 나무다리 — 4단계 (400cm, 40cm, 20cm)
 function SchemaFixedBridge({ color }) {
   return (
-    <svg viewBox="0 0 360 230" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="230" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">고정된 나무다리 건너기 (PDF 3.3.14 Rigid Wooden Board)</text>
-      {/* Step 1: DH left, dog jumps on */}
-      <text x="30" y="38" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가</text>
-      <rect x="10" y="55" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="17" cy="51" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="55" cy="68" rx="10" ry="7" fill={color} opacity="0.35" stroke={color} strokeWidth="1.2"/>
-      <text x="55" y="71" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">멈춰</text>
-      {/* Board 1 */}
-      <rect x="35" y="62" width="160" height="12" rx="2" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5"/>
-      {/* Supports */}
-      <rect x="35" y="74" width="10" height="20" rx="2" fill={color} opacity="0.5"/>
-      <rect x="185" y="74" width="10" height="20" rx="2" fill={color} opacity="0.5"/>
-      <text x="115" y="58" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 약 4m · 너비 30cm →</text>
-      <text x="115" y="95" textAnchor="middle" fontSize="7" fill="#888">높이 50cm</text>
+    <svg viewBox="0 0 440 380" style={{ width:"100%", maxWidth:440, display:"block", margin:"0 auto" }}>
+      <rect width="440" height="380" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="220" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">고정된 나무다리 건너기 (PDF 3.3.14 Rigid Wooden Board)</text>
 
-      {/* Step 2: DH alongside dog */}
-      <text x="30" y="125" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② 계속</text>
-      <rect x="10" y="140" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="17" cy="136" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="130" cy="149" rx="10" ry="7" fill={color} opacity="0.35" stroke={color} strokeWidth="1.2"/>
-      <rect x="35" y="143" width="160" height="12" rx="2" fill={color} opacity="0.25" stroke={color} strokeWidth="1.5"/>
-      <rect x="35" y="155" width="10" height="18" rx="2" fill={color} opacity="0.5"/>
-      <rect x="185" y="155" width="10" height="18" rx="2" fill={color} opacity="0.5"/>
-      <text x="25" y="152" fontSize="7" fill={color}>동반</text>
+      {/* Dimensions header */}
+      <line x1="80" y1="35" x2="400" y2="35" stroke="#222" strokeWidth="1.5"/>
+      <text x="240" y="30" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">400 cm</text>
+      <line x1="80" y1="32" x2="80" y2="38" stroke="#222" strokeWidth="1.5"/>
+      <line x1="400" y1="32" x2="400" y2="38" stroke="#222" strokeWidth="1.5"/>
+      {/* Height */}
+      <text x="415" y="75" fontSize="8" fill="#222" fontWeight="700">40 cm</text>
+      <line x1="405" y1="58" x2="425" y2="58" stroke="#222" strokeWidth="1"/>
+      <line x1="405" y1="82" x2="425" y2="82" stroke="#222" strokeWidth="1"/>
+      {/* 20cm ramp */}
+      <text x="32" y="72" fontSize="8" fill="#222">20 cm</text>
 
-      {/* Step 3: DH right, dog off board → GS */}
-      <text x="30" y="200" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ 기본자세</text>
-      <rect x="185" y="208" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="192" cy="204" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="230" cy="215" rx="10" ry="7" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
-      <text x="230" y="218" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">GS</text>
-      <rect x="35" y="208" width="160" height="12" rx="2" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <rect x="35" y="220" width="10" height="10" rx="2" fill={color} opacity="0.4"/>
-      <rect x="185" y="220" width="10" height="10" rx="2" fill={color} opacity="0.4"/>
+      const drawBoard = (yBase) => (<g>
+        {/* Ramp */}
+        <line x1="40" y1={yBase+20} x2="80" y2={yBase} stroke="#a07830" strokeWidth="3" strokeLinecap="round"/>
+        {/* Board */}
+        <rect x="80" y={yBase-6} width="320" height="12" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+        {/* Supports */}
+        <rect x="80" y={yBase+6} width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+        <rect x="384" y={yBase+6} width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      </g>);
 
-      {/* V marker */}
-      <text x="200" y="145" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+      {/* Stage 1: dog going up ramp */}
+      <line x1="40" y1="100" x2="80" y2="80" stroke="#a07830" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="80" y="74" width="320" height="12" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="80" y="86" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="384" y="86" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="14" y="80" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="20" cy="76" r="6" fill="#222"/>
+      <line x1="8" y1="80" x2="8" y2="102" stroke="#222" strokeWidth="2"/>
+      <polygon points="8,80 20,85 8,90" fill="#222"/>
+      <ellipse cx="105" cy="70" rx="11" ry="7" fill="#888"/>
 
-      {/* Note */}
-      <rect x="220" y="130" width="130" height="40" rx="5" fill={color} opacity="0.07" stroke={color} strokeWidth="1"/>
-      <text x="285" y="143" textAnchor="middle" fontSize="7" fill="#555">전반부 뛰어내리면 0점</text>
-      <text x="285" y="153" textAnchor="middle" fontSize="7" fill="#555">후반부 뛰어내리면</text>
-      <text x="285" y="163" textAnchor="middle" fontSize="7" fill="#C0392B">부족함(M)</text>
+      {/* Stage 2: DH alongside dog (A-level) */}
+      <line x1="40" y1="175" x2="80" y2="155" stroke="#a07830" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="80" y="149" width="320" height="12" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="80" y="161" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="384" y="161" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="14" y="155" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="20" cy="151" r="6" fill="#222"/>
+      <line x1="8" y1="155" x2="8" y2="177" stroke="#222" strokeWidth="2"/>
+      <polygon points="8,155 20,160 8,165" fill="#222"/>
+      <rect x="150" y="145" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="156" cy="141" r="6" fill="#222"/>
+      <ellipse cx="170" cy="148" rx="11" ry="7" fill="#888"/>
+      <text x="380" y="178" fontSize="9" fill="#c00" fontWeight="700">V</text>
+
+      {/* Stage 3: DH waiting, dog at end (B-level) */}
+      <line x1="40" y1="250" x2="80" y2="230" stroke="#a07830" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="80" y="224" width="320" height="12" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="80" y="236" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="384" y="236" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="14" y="230" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="20" cy="226" r="6" fill="#222"/>
+      <line x1="8" y1="230" x2="8" y2="252" stroke="#222" strokeWidth="2"/>
+      <polygon points="8,230 20,235 8,240" fill="#222"/>
+      <rect x="330" y="220" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="336" cy="216" r="6" fill="#222"/>
+      <ellipse cx="352" cy="224" rx="11" ry="7" fill="#888"/>
+      <text x="380" y="252" fontSize="9" fill="#c00" fontWeight="700">V</text>
+
+      {/* Stage 4: DH right, dog GS */}
+      <line x1="40" y1="325" x2="80" y2="305" stroke="#a07830" strokeWidth="3" strokeLinecap="round"/>
+      <rect x="80" y="299" width="320" height="12" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="80" y="311" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="384" y="311" width="16" height="22" rx="2" fill="#888" opacity="0.6"/>
+      <rect x="14" y="305" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="20" cy="301" r="6" fill="#222"/>
+      <line x1="8" y1="305" x2="8" y2="327" stroke="#222" strokeWidth="2"/>
+      <polygon points="8,305 20,310 8,315" fill="#222"/>
+      <rect x="400" y="305" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="406" cy="301" r="6" fill="#222"/>
+      <ellipse cx="418" cy="318" rx="9" ry="6" fill="#888"/>
     </svg>
   );
 }
 
-// 비고정 나무다리 — PDF p.27-28 도식
+// Image 4: 비고정 나무다리 — 4단계 (400cm, Mobility=20cm, 40cm)
 function SchemaMovingBridge({ color }) {
   return (
-    <svg viewBox="0 0 340 200" style={{ width:"100%", maxWidth:340, display:"block", margin:"0 auto" }}>
-      <rect width="340" height="200" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="170" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">비고정 나무다리 (PDF 3.3.15 Unstable Plank · A단계 전용)</text>
-      {/* Step 1 */}
-      <text x="25" y="38" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가→멈춰</text>
-      <rect x="8" y="52" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="15" cy="48" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="60" cy="64" rx="10" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <text x="60" y="67" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">멈춰</text>
-      {/* Barrel 1 */}
-      <ellipse cx="55" cy="82" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
-      <text x="55" y="86" textAnchor="middle" fontSize="7" fill={color}>Ø40cm</text>
-      {/* Board */}
-      <rect x="35" y="58" width="200" height="12" rx="3" fill={color} opacity="0.25" stroke={color} strokeWidth="2"/>
-      <text x="135" y="52" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">← 4m (이동폭 20cm) →</text>
-      {/* Barrel 2 */}
-      <ellipse cx="215" cy="82" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
-      <text x="215" y="86" textAnchor="middle" fontSize="7" fill={color}>Ø40cm</text>
-      {/* V marker */}
-      <text x="220" y="64" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+    <svg viewBox="0 0 500 400" style={{ width:"100%", maxWidth:500, display:"block", margin:"0 auto" }}>
+      <rect width="500" height="400" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="250" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">비고정 나무다리 (PDF 3.3.15 Unstable Plank · A단계 전용)</text>
 
-      {/* Step 2 */}
-      <text x="25" y="115" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② 계속 (동반)</text>
-      <rect x="8" y="128" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="15" cy="124" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="160" cy="138" rx="10" ry="7" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <rect x="35" y="132" width="200" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="2"/>
-      <ellipse cx="55" cy="152" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
-      <ellipse cx="215" cy="152" rx="18" ry="10" fill="none" stroke={color} strokeWidth="1.5"/>
+      {/* Stage 1: dimensions + dog at start */}
+      <line x1="100" y1="35" x2="420" y2="35" stroke="#222" strokeWidth="1.5"/>
+      <text x="260" y="30" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">400 cm</text>
+      <line x1="100" y1="32" x2="100" y2="38" stroke="#222" strokeWidth="1.5"/>
+      <line x1="420" y1="32" x2="420" y2="38" stroke="#222" strokeWidth="1.5"/>
+      {/* Mobility red arrow */}
+      <line x1="175" y1="80" x2="340" y2="80" stroke="#c00" strokeWidth="2"/>
+      <polygon points="175,77 165,80 175,83" fill="#c00"/>
+      <polygon points="340,77 350,80 340,83" fill="#c00"/>
+      <text x="258" y="75" textAnchor="middle" fontSize="9" fill="#c00" fontWeight="700">Mobility = 20 cm</text>
+      {/* Height */}
+      <text x="440" y="90" fontSize="8" fill="#222" fontWeight="700">40 cm</text>
 
-      {/* Step 3: DH right side, dog on end */}
-      <text x="25" y="180" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ 하강→기본자세</text>
-      <rect x="230" y="175" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="237" cy="171" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="265" cy="183" rx="10" ry="7" fill={color} opacity="0.5" stroke={color} strokeWidth="1.2"/>
-      <text x="265" y="186" textAnchor="middle" fontSize="6.5" fill={color} fontWeight="700">GS</text>
+      {/* Board + barrels stage 1 */}
+      <ellipse cx="145" cy="88" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <ellipse cx="380" cy="88" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <rect x="100" y="65" width="320" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      {/* Corner dots */}
+      <circle cx="100" cy="65" r="5" fill="#222"/>
+      <circle cx="420" cy="65" r="5" fill="#222"/>
+      <circle cx="100" cy="92" r="5" fill="#222"/>
+      <circle cx="420" cy="92" r="5" fill="#222"/>
+      {/* Small square near barrel */}
+      <rect x="372" y="74" width="8" height="8" rx="1" fill="#222" opacity="0.5"/>
+      {/* DH + dog left */}
+      <rect x="28" y="58" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="54" r="6" fill="#222"/>
+      <ellipse cx="50" cy="66" rx="9" ry="6" fill="#888" opacity="0.6"/>
+      <line x1="18" y1="58" x2="18" y2="80" stroke="#222" strokeWidth="2"/>
+      <polygon points="18,58 30,63 18,68" fill="#222"/>
+      {/* Dog on board */}
+      <ellipse cx="165" cy="60" rx="13" ry="8" fill="#888"/>
+      <text x="145" y="102" textAnchor="middle" fontSize="8" fill="#222" fontWeight="700">V</text>
+
+      {/* Stage 2: DH alongside dog center */}
+      <ellipse cx="145" cy="172" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <ellipse cx="380" cy="172" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <rect x="100" y="149" width="320" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <rect x="372" y="158" width="8" height="8" rx="1" fill="#222" opacity="0.5"/>
+      <rect x="28" y="148" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="144" r="6" fill="#222"/>
+      <line x1="18" y1="148" x2="18" y2="170" stroke="#222" strokeWidth="2"/>
+      <polygon points="18,148 30,153 18,158" fill="#222"/>
+      <rect x="175" y="140" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="181" cy="136" r="6" fill="#222"/>
+      <ellipse cx="198" cy="148" rx="13" ry="8" fill="#888"/>
+
+      {/* Stage 3: DH right side, dog at end */}
+      <ellipse cx="145" cy="258" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <ellipse cx="380" cy="258" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <rect x="100" y="235" width="320" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <rect x="372" y="244" width="8" height="8" rx="1" fill="#222" opacity="0.5"/>
+      <rect x="28" y="238" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="234" r="6" fill="#222"/>
+      <line x1="18" y1="238" x2="18" y2="260" stroke="#222" strokeWidth="2"/>
+      <polygon points="18,238 30,243 18,248" fill="#222"/>
+      <rect x="310" y="228" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="316" cy="224" r="6" fill="#222"/>
+      <ellipse cx="338" cy="240" rx="13" ry="8" fill="#888"/>
+      <text x="145" y="275" textAnchor="middle" fontSize="8" fill="#222" fontWeight="700">V</text>
+
+      {/* Stage 4: DH far right, dog GS */}
+      <ellipse cx="145" cy="340" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <ellipse cx="380" cy="340" rx="30" ry="18" fill="#d4c87e" stroke="#a07830" strokeWidth="2"/>
+      <rect x="100" y="317" width="320" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      <rect x="372" y="326" width="8" height="8" rx="1" fill="#222" opacity="0.5"/>
+      <rect x="28" y="320" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="34" cy="316" r="6" fill="#222"/>
+      <line x1="18" y1="320" x2="18" y2="342" stroke="#222" strokeWidth="2"/>
+      <polygon points="18,320 30,325 18,330" fill="#222"/>
+      <rect x="430" y="320" width="12" height="22" rx="3" fill="#222"/>
+      <circle cx="436" cy="316" r="6" fill="#222"/>
+      <ellipse cx="452" cy="332" rx="9" ry="6" fill="#888"/>
 
       {/* Note */}
-      <rect x="240" y="98" width="90" height="32" rx="5" fill={color} opacity="0.07" stroke={color} strokeWidth="1"/>
-      <text x="285" y="110" textAnchor="middle" fontSize="7" fill="#555">전반부 이탈 → 0점</text>
-      <text x="285" y="120" textAnchor="middle" fontSize="7" fill="#C0392B">후반부 이탈 →</text>
-      <text x="285" y="128" textAnchor="middle" fontSize="7" fill="#C0392B">부족함(M)</text>
+      <rect x="10" y="368" width="480" height="25" rx="4" fill="#f5f5f5"/>
+      <text x="250" y="382" textAnchor="middle" fontSize="8.5" fill="#333">전반부 이탈→0점 / 후반부 이탈→부족함(M) · 원통 2개(Ø40cm) 위 4m 판자(너비 30cm)</text>
     </svg>
   );
 }
 
-// 사다리 — PDF p.29 치수 + 3단계 진행 도식
+// Image 3: 사다리 — 4단계 진행 (50cm 표시)
 function SchemaLadder({ color }) {
   return (
-    <svg viewBox="0 0 360 250" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="250" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">사다리 건너기 (PDF 3.3.16 Horizontal Ladder)</text>
-      {/* Dimensions label */}
-      <text x="165" y="32" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 395cm (14 디딤대, 간격 30cm) →</text>
-      {/* Step 1: dog going on ramp */}
-      <text x="18" y="48" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">① 올라가</text>
-      {/* Ramp */}
-      <line x1="30" y1="80" x2="60" y2="58" stroke={color} strokeWidth="3" strokeLinecap="round"/>
-      {/* Ladder beams */}
-      <line x1="60" y1="58" x2="60" y2="68" stroke={color} strokeWidth="2.5"/>
-      <line x1="300" y1="58" x2="300" y2="68" stroke={color} strokeWidth="2.5"/>
-      <line x1="60" y1="58" x2="300" y2="58" stroke={color} strokeWidth="2.5"/>
-      <line x1="60" y1="68" x2="300" y2="68" stroke={color} strokeWidth="2.5"/>
-      {/* Rungs */}
-      {Array.from({length:14}).map((_,i)=>(
-        <line key={i} x1={60+i*17.1} y1="58" x2={60+i*17.1} y2="68" stroke={color} strokeWidth="1.2" opacity="0.5"/>
-      ))}
-      {/* Supports */}
-      <rect x="52" y="68" width="16" height="16" rx="2" fill={color} opacity="0.4"/>
-      <rect x="292" y="68" width="16" height="16" rx="2" fill={color} opacity="0.4"/>
-      <text x="60" y="93" textAnchor="middle" fontSize="7" fill="#888">50cm</text>
-      <text x="300" y="93" textAnchor="middle" fontSize="7" fill="#888">50cm</text>
-      {/* DH figure & dog step1 */}
-      <rect x="6" y="64" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="13" cy="60" r="5" fill={color} opacity="0.7"/>
-      <ellipse cx="75" cy="52" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
+    <svg viewBox="0 0 440 420" style={{ width:"100%", maxWidth:440, display:"block", margin:"0 auto" }}>
+      <rect width="440" height="420" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="220" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">사다리 건너기 (PDF 3.3.16 Horizontal Ladder)</text>
 
-      {/* Step 2: DH alongside A-level */}
-      <text x="18" y="120" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">② A: 동반</text>
-      <rect x="6" y="133" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="13" cy="129" r="5" fill={color} opacity="0.7"/>
-      <line x1="60" y1="127" x2="300" y2="127" stroke={color} strokeWidth="2.5"/>
-      <line x1="60" y1="137" x2="300" y2="137" stroke={color} strokeWidth="2.5"/>
-      {Array.from({length:14}).map((_,i)=>(
-        <line key={i} x1={60+i*17.1} y1="127" x2={60+i*17.1} y2="137" stroke={color} strokeWidth="1.2" opacity="0.5"/>
-      ))}
-      <rect x="52" y="137" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
-      <rect x="292" y="137" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
-      <ellipse cx="170" cy="121" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      {/* V marker for A level */}
-      <text x="300" y="152" fontSize="9" fill="#E53E3E" fontWeight="700">V</text>
+      {/* Helper function to draw ladder at yBase */}
+      {[0,1,2,3].map((stage)=>{
+        const yBase = 42 + stage * 95;
+        const hasRamp = true;
+        return (
+          <g key={stage}>
+            {/* Flag */}
+            <line x1="16" y1={yBase+22} x2="16" y2={yBase+44} stroke="#222" strokeWidth="2"/>
+            <polygon points={`16,${yBase+22} 28,${yBase+27} 16,${yBase+32}`} fill="#222"/>
+            {/* Ramp */}
+            <line x1="38" y1={yBase+36} x2="80" y2={yBase+14} stroke="#a07830" strokeWidth="3.5" strokeLinecap="round"/>
+            {/* Ladder main */}
+            <rect x="80" y={yBase+8} width="310" height="18" rx="2" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+            {/* Rungs */}
+            {Array.from({length:14}).map((_,i)=>(
+              <line key={i} x1={80+i*22} y1={yBase+8} x2={80+i*22} y2={yBase+26}
+                stroke="#a07830" strokeWidth="2" opacity="0.5"/>
+            ))}
+            {/* Supports */}
+            <rect x="80" y={yBase+26} width="16" height="18" rx="2" fill="#888" opacity="0.5"/>
+            <rect x="374" y={yBase+26} width="16" height="18" rx="2" fill="#888" opacity="0.5"/>
+            {/* DH silhouette */}
+            <rect x="28" y={yBase+14} width="12" height="22" rx="3" fill="#222"/>
+            <circle cx="34" cy={yBase+10} r="6" fill="#222"/>
+            {/* Stage-specific dog + DH positions */}
+            {stage === 0 && (
+              <g>
+                {/* Dog just getting on ramp */}
+                <ellipse cx="68" cy={yBase+20} rx="10" ry="7" fill="#888"/>
+                {/* 50cm label */}
+                <text x="65" y={yBase+50} fontSize="8" fill="#c00" fontWeight="700">50 cm</text>
+                <line x1="80" y1={yBase+44} x2="80" y2={yBase+26} stroke="#c00" strokeWidth="1"/>
+              </g>
+            )}
+            {stage === 1 && (
+              <g>
+                {/* DH alongside dog on ladder */}
+                <rect x="108" y={yBase+4} width="12" height="22" rx="3" fill="#222"/>
+                <circle cx="114" cy={yBase} r="6" fill="#222"/>
+                <ellipse cx="132" cy={yBase+14} rx="11" ry="7" fill="#888"/>
+              </g>
+            )}
+            {stage === 2 && (
+              <g>
+                {/* DH and dog further along */}
+                <rect x="260" y={yBase+4} width="12" height="22" rx="3" fill="#222"/>
+                <circle cx="266" cy={yBase} r="6" fill="#222"/>
+                <ellipse cx="288" cy={yBase+14} rx="11" ry="7" fill="#888"/>
+                {/* V marker */}
+                <text x="376" y={yBase+46} fontSize="9" fill="#c00" fontWeight="700">V</text>
+              </g>
+            )}
+            {stage === 3 && (
+              <g>
+                {/* DH right, dog at end being lifted */}
+                <rect x="390" y={yBase+14} width="12" height="22" rx="3" fill="#222"/>
+                <circle cx="396" cy={yBase+10} r="6" fill="#222"/>
+                <ellipse cx="412" cy={yBase+24} rx="9" ry="6" fill="#888"/>
+              </g>
+            )}
+          </g>
+        );
+      })}
 
-      {/* Step 3: DH waits B-level, then lifts dog */}
-      <text x="18" y="185" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">③ B: 대기→접근</text>
-      <rect x="6" y="198" width="14" height="20" rx="3" fill={color} opacity="0.7"/>
-      <circle cx="13" cy="194" r="5" fill={color} opacity="0.7"/>
-      <line x1="60" y1="195" x2="300" y2="195" stroke={color} strokeWidth="2.5"/>
-      <line x1="60" y1="205" x2="300" y2="205" stroke={color} strokeWidth="2.5"/>
-      {Array.from({length:14}).map((_,i)=>(
-        <line key={i} x1={60+i*17.1} y1="195" x2={60+i*17.1} y2="205" stroke={color} strokeWidth="1.2" opacity="0.5"/>
-      ))}
-      <rect x="52" y="205" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
-      <rect x="292" y="205" width="16" height="14" rx="2" fill={color} opacity="0.4"/>
-      <ellipse cx="285" cy="189" rx="9" ry="6" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
-      <rect x="302" y="193" width="40" height="18" rx="4" fill={color} opacity="0.15" stroke={color} strokeWidth="1"/>
-      <text x="322" y="205" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">들어 내림</text>
       {/* Note */}
-      <rect x="6" y="225" width="348" height="18" rx="4" fill={color} opacity="0.07"/>
-      <text x="180" y="237" textAnchor="middle" fontSize="7.5" fill="#555">전반부 이탈→0점 · 후반부 이탈→부족함(M) · 마지막 디딤대 후 이탈→최대 만족함(B)</text>
+      <rect x="10" y="395" width="420" height="20" rx="4" fill="#f5f5f5"/>
+      <text x="220" y="408" textAnchor="middle" fontSize="8.5" fill="#333">전반부 이탈→0점 / 후반부 이탈→부족함(M) / 마지막 디딤대 후 이탈→최대 만족함(B)</text>
     </svg>
   );
 }
 
-// 그네 — PDF p.30-31 도식
+// Image 2: 그네 — PDF 원본 (Schaukel ist in Bewegung + GS arrows)
 function SchemaSeesaw({ color }) {
   return (
-    <svg viewBox="0 0 360 220" style={{ width:"100%", maxWidth:360, display:"block", margin:"0 auto" }}>
-      <rect width="360" height="220" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="180" y="16" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">그네 건너기 (PDF 3.3.17 Swing · B단계 전용)</text>
-      {/* Dimensions */}
-      <text x="185" y="34" textAnchor="middle" fontSize="7.5" fill={color} fontWeight="700">L=300cm, B=30cm</text>
-      <text x="185" y="44" textAnchor="middle" fontSize="7.5" fill={color}>H=40cm</text>
+    <svg viewBox="0 0 500 260" style={{ width:"100%", maxWidth:500, display:"block", margin:"0 auto" }}>
+      <rect width="500" height="260" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
+      <text x="250" y="16" textAnchor="middle" fontSize="10" fill="#8B9EC0" fontWeight="700">그네 건너기 (PDF 3.3.17 Swing · B단계 전용)</text>
+
+      {/* GS left */}
+      <rect x="18" y="120" width="12" height="24" rx="3" fill="#222"/>
+      <circle cx="24" cy="116" r="7" fill="#222"/>
+      <text x="24" y="155" textAnchor="middle" fontSize="9" fill="#222" fontWeight="700">GS</text>
+
       {/* Support frames */}
-      <line x1="60" y1="50" x2="60" y2="110" stroke={color} strokeWidth="3"/>
-      <line x1="55" y1="50" x2="65" y2="50" stroke={color} strokeWidth="2"/>
-      <line x1="50" y1="55" x2="70" y2="55" stroke={color} strokeWidth="1.5"/>
-      <line x1="310" y1="50" x2="310" y2="110" stroke={color} strokeWidth="3"/>
-      <line x1="305" y1="50" x2="315" y2="50" stroke={color} strokeWidth="2"/>
-      <line x1="300" y1="55" x2="320" y2="55" stroke={color} strokeWidth="1.5"/>
+      {/* Left frame */}
+      <line x1="95" y1="55" x2="95" y2="130" stroke="#222" strokeWidth="3"/>
+      <line x1="80" y1="55" x2="110" y2="55" stroke="#222" strokeWidth="2.5"/>
+      <line x1="75" y1="60" x2="80" y2="130" stroke="#222" strokeWidth="1.5"/>
+      <line x1="115" y1="60" x2="110" y2="130" stroke="#222" strokeWidth="1.5"/>
+      {/* Right frame */}
+      <line x1="400" y1="55" x2="400" y2="130" stroke="#222" strokeWidth="3"/>
+      <line x1="385" y1="55" x2="415" y2="55" stroke="#222" strokeWidth="2.5"/>
+      <line x1="380" y1="60" x2="385" y2="130" stroke="#222" strokeWidth="1.5"/>
+      <line x1="420" y1="60" x2="415" y2="130" stroke="#222" strokeWidth="1.5"/>
+
       {/* Chains */}
-      <line x1="60" y1="55" x2="70" y2="95" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
-      <line x1="310" y1="55" x2="300" y2="95" stroke={color} strokeWidth="1.5" strokeDasharray="3,2"/>
-      {/* Moving plank */}
-      <rect x="70" y="90" width="230" height="14" rx="4" fill={color} opacity="0.3" stroke={color} strokeWidth="2"/>
-      <text x="185" y="101" textAnchor="middle" fontSize="8" fill={color} fontWeight="700">← 3m 널빤지 (자유 이동 ~25cm) →</text>
-      {/* Bracing */}
-      <line x1="70" y1="110" x2="50" y2="130" stroke={color} strokeWidth="1.5"/>
-      <line x1="300" y1="110" x2="320" y2="130" stroke={color} strokeWidth="1.5"/>
+      <line x1="95" y1="60" x2="110" y2="100" stroke="#555" strokeWidth="1.5" strokeDasharray="4,2"/>
+      <line x1="400" y1="60" x2="385" y2="100" stroke="#555" strokeWidth="1.5" strokeDasharray="4,2"/>
+
+      {/* Moving plank (slightly angled to show motion) */}
+      <rect x="110" y="98" width="275" height="16" rx="4" fill="#c8a050" stroke="#a07830" strokeWidth="2"/>
+      {/* "Schaukel ist in Bewegung" label */}
+      <text x="247" y="93" textAnchor="middle" fontSize="8.5" fill="#555" fontStyle="italic">Schaukel ist in Bewegung</text>
+
       {/* Mounting ramps */}
-      <rect x="18" y="118" width="55" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="45" y="128" textAnchor="middle" fontSize="7" fill={color}>탑승판(150cm)</text>
-      <rect x="297" y="118" width="55" height="12" rx="3" fill={color} opacity="0.2" stroke={color} strokeWidth="1.5"/>
-      <text x="324" y="128" textAnchor="middle" fontSize="7" fill={color}>하강판(150cm)</text>
-      {/* Execution arrows */}
-      <text x="20" y="152" fontSize="8" fill={color} fontWeight="700">GS →</text>
-      <text x="55" y="152" fontSize="8" fill={color}>올라가·멈춰</text>
-      <text x="140" y="152" fontSize="8" fill={color}>→ 계속 →</text>
-      <text x="240" y="152" fontSize="8" fill={color}>내려가</text>
-      <text x="305" y="152" fontSize="8" fill={color}>→ GS</text>
-      {/* Dimension annotations */}
-      <line x1="10" y1="100" x2="10" y2="130" stroke={color} strokeWidth="1" strokeDasharray="2,2"/>
-      <text x="15" y="118" fontSize="7" fill="#888">~160cm</text>
-      <text x="15" y="128" fontSize="7" fill="#888">~135cm</text>
-      <text x="130" y="140" textAnchor="middle" fontSize="7" fill="#888">~100cm</text>
-      <text x="290" y="140" textAnchor="middle" fontSize="7" fill="#888">~50cm</text>
+      <rect x="38" y="118" width="75" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+      <rect x="385" y="118" width="75" height="14" rx="3" fill="#c8a050" stroke="#a07830" strokeWidth="1.5"/>
+
+      {/* Dog on plank */}
+      <ellipse cx="200" cy="94" rx="14" ry="9" fill="#888"/>
+
+      {/* Action arrows at bottom */}
+      <text x="24" y="175" fontSize="9" fill="#222" fontWeight="700">GS</text>
+      <line x1="38" y1="172" x2="82" y2="172" stroke="#222" strokeWidth="2"/>
+      <polygon points="82,169 90,172 82,175" fill="#222"/>
+      <text x="92" y="175" fontSize="8" fill="#222">Aufsteigen und ver-</text>
+      <text x="92" y="186" fontSize="8" fill="#222">harren auf HZ/SZ</text>
+
+      <line x1="195" y1="172" x2="248" y2="172" stroke="#222" strokeWidth="2"/>
+      <polygon points="248,169 256,172 248,175" fill="#222"/>
+      <text x="258" y="175" fontSize="8" fill="#222">verharren HF und H</text>
+
+      <line x1="340" y1="172" x2="393" y2="172" stroke="#222" strokeWidth="2"/>
+      <polygon points="393,169 401,172 393,175" fill="#222"/>
+      <text x="403" y="172" fontSize="9" fill="#222" fontWeight="700">GS</text>
+
+      {/* Lower arrows */}
+      <line x1="92" y1="200" x2="145" y2="200" stroke="#555" strokeWidth="1.5"/>
+      <polygon points="145,197 153,200 145,203" fill="#555"/>
+      <text x="155" y="203" fontSize="8" fill="#555">Weitergehen auf HZ oder SZ</text>
+
+      <line x1="292" y1="200" x2="345" y2="200" stroke="#555" strokeWidth="1.5"/>
+      <polygon points="345,197 353,200 345,203" fill="#555"/>
+      <text x="355" y="203" fontSize="8" fill="#555">Weitergehen</text>
+      <text x="355" y="213" fontSize="8" fill="#555">auf HZ oder SZ</text>
+
       {/* Note */}
-      <rect x="10" y="160" width="340" height="28" rx="4" fill={color} opacity="0.07"/>
-      <text x="180" y="171" textAnchor="middle" fontSize="7.5" fill="#555">전반부 이탈→0점 / 후반부 이탈→부족함(M)</text>
-      <text x="180" y="182" textAnchor="middle" fontSize="7.5" fill="#555">유사 구조물(같은 치수·이동폭) 허용 · 종단 이동 25cm 이내 제한 가능</text>
+      <rect x="10" y="225" width="480" height="28" rx="4" fill="#f5f5f5"/>
+      <text x="250" y="237" textAnchor="middle" fontSize="8.5" fill="#333">전반부 이탈→0점 / 후반부 이탈→부족함(M) / L=300cm · B=30cm · H=40cm</text>
+      <text x="250" y="248" textAnchor="middle" fontSize="8.5" fill="#333">탑승판·하강판: 약 150cm · 높이 35cm · B단계 전용</text>
     </svg>
   );
 }
@@ -1236,7 +1735,7 @@ function SchemaSeesaw({ color }) {
 function SchemaWait({ color }) {
   return (
     <svg viewBox="0 0 320 155" style={{ width:"100%", maxWidth:320, display:"block", margin:"0 auto" }}>
-      <rect width="320" height="155" rx="10" fill="#F8FAFF" stroke="#E2E8F0" strokeWidth="1"/>
+      <rect width="320" height="155" rx="10" fill="#fff" stroke="#E2E8F0" strokeWidth="1"/>
       <text x="160" y="17" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">산만한 상황에서의 대기 — 단계별 위치 (PDF 3.3.12)</text>
       <text x="35" y="40" textAnchor="middle" fontSize="9" fill={color} fontWeight="700">V단계</text>
       <circle cx="20" cy="85" r="8" fill={color} opacity="0.3" stroke={color} strokeWidth="1.2"/>
@@ -1259,19 +1758,19 @@ function SchemaWait({ color }) {
       <text x="273" y="90" textAnchor="middle" fontSize="7" fill="white" fontWeight="700">은폐</text>
       <line x1="208" y1="85" x2="258" y2="85" stroke={color} strokeWidth="1.5" strokeDasharray="4,2"/>
       <text x="234" y="100" textAnchor="middle" fontSize="7.5" fill="#555">완전 은폐</text>
-      <rect x="10" y="120" width="300" height="28" rx="4" fill={color} opacity="0.07"/>
-      <text x="160" y="131" textAnchor="middle" fontSize="7.5" fill="#555">2번째 과목 완료 후 3m 이상 이탈 → 부족함(M)</text>
-      <text x="160" y="142" textAnchor="middle" fontSize="7.5" fill="#C0392B">2번째 과목 이전에 3m 이상 이탈 → 0점</text>
+      <rect x="10" y="115" width="300" height="32" rx="4" fill="#f5f5f5"/>
+      <text x="160" y="126" textAnchor="middle" fontSize="7.5" fill="#555">2번째 과목 완료 후 3m 이상 이탈 → 부족함(M)</text>
+      <text x="160" y="137" textAnchor="middle" fontSize="7.5" fill="#c00">2번째 과목 이전에 3m 이상 이탈 → 0점</text>
     </svg>
   );
 }
 
-// 수상 원격조정 도식
+// 수상 원격조정
 function SchemaWaterRemote({ color }) {
   return (
     <svg viewBox="0 0 310 175" style={{ width:"100%", maxWidth:310, display:"block", margin:"0 auto" }}>
       <rect width="310" height="175" rx="10" fill="#E1F5FE" stroke="#E2E8F0" strokeWidth="1"/>
-      <text x="155" y="17" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">수상 원격조정 (PDF 3.3.24 Directability at Distance)</text>
+      <text x="155" y="17" textAnchor="middle" fontSize="9.5" fill="#8B9EC0" fontWeight="700">수상 원격조정 (PDF 3.3.24)</text>
       <rect x="8" y="125" width="62" height="22" rx="4" fill="#1A1E2E" opacity="0.7"/>
       <text x="39" y="139" textAnchor="middle" fontSize="9" fill="white" fontWeight="700">지도수(육지)</text>
       <rect x="162" y="28" width="52" height="22" rx="4" fill={color} opacity="0.8"/>
@@ -1296,24 +1795,25 @@ function SchemaWaterRemote({ color }) {
 function SchemaRenderer({ schemaKey, color }) {
   if (!schemaKey) return null;
   const map = {
-    heeling: <SchemaHeeling color={color} />,
+    heeling:        <SchemaHeeling color={color} />,
     leashedHeeling: <SchemaLeashedHeeling color={color} />,
-    socialTest: <SchemaSocialTest color={color} />,
-    movingSit: <SchemaMovingSit color={color} />,
-    remoteControl: <SchemaRemoteControl color={color} />,
-    sendAwayV: <SchemaSendAwayV color={color} />,
-    sendAwayAB: <SchemaSendAwayAB color={color} />,
-    ladder: <SchemaLadder color={color} />,
-    seesaw: <SchemaSeesaw color={color} />,
-    tunnel: <SchemaTunnel color={color} />,
-    fixedbridge: <SchemaFixedBridge color={color} />,
-    movingbridge: <SchemaMovingBridge color={color} />,
-    waterRemote: <SchemaWaterRemote color={color} />,
-    waitSchema: <SchemaWait color={color} />,
+    socialTest:     <SchemaSocialTest color={color} />,
+    movingSit:      <SchemaMovingSit color={color} />,
+    remoteControl:  <SchemaRemoteControl color={color} />,
+    sendAwayV:      <SchemaSendAwayV color={color} />,
+    sendAwayAB:     <SchemaSendAwayAB color={color} />,
+    ladder:         <SchemaLadder color={color} />,
+    seesaw:         <SchemaSeesaw color={color} />,
+    tunnel:         <SchemaTunnel color={color} />,
+    fixedbridge:    <SchemaFixedBridge color={color} />,
+    movingbridge:   <SchemaMovingBridge color={color} />,
+    waterRemote:    <SchemaWaterRemote color={color} />,
+    waitSchema:     <SchemaWait color={color} />,
+    carryHandover:  <SchemaCarryHandover color={color} />,
+    positionChange: <SchemaPositionChange color={color} />,
   };
   return map[schemaKey] || null;
 }
-
 function ProcedureCard({ itemName, color }) {
   const data = procedureMap[itemName];
   if (!data) return null;
